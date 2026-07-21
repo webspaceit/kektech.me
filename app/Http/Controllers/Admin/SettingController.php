@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
@@ -107,5 +109,18 @@ class SettingController extends Controller
         }
 
         return back()->with('success', ucfirst(str_replace('_', ' ', $field)) . ' deleted successfully.');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = auth()->user();
+        $user->update(['password' => Hash::make($request->new_password)]);
+
+        return back()->with('success', 'Password updated successfully.');
     }
 }

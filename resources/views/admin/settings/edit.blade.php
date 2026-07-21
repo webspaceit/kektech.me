@@ -279,4 +279,34 @@
         @csrf
         @method('DELETE')
     </form>
+
+    {{-- Change Password --}}
+    <form method="POST" action="{{ route('admin.settings.changePassword') }}" class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-2xl mb-6">
+        @csrf
+        @method('PUT')
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Change Password</h2>
+
+        <div class="mb-4">
+            <label for="current_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current Password</label>
+            <input type="password" id="current_password" name="current_password" required
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">
+            @error('current_password') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="new_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New Password</label>
+                <input type="password" id="new_password" name="new_password" required
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">
+                @error('new_password') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirm New Password</label>
+                <input type="password" id="new_password_confirmation" name="new_password_confirmation" required
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">
+            </div>
+        </div>
+
+        <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition">Update Password</button>
+    </form>
 @endsection
