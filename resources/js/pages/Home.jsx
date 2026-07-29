@@ -87,13 +87,16 @@ export default function Home({ settings, featuredProjects, skills, recentPosts, 
                                     )}
                                     <h3 className="text-lg font-semibold text-white group-hover:text-indigo-400 transition-colors">{project.title}</h3>
                                     <p className="mt-2 text-sm text-gray-400 line-clamp-2">{project.description}</p>
-                                    {project.tech_stack?.length > 0 && (
-                                        <div className="mt-4 flex flex-wrap gap-2">
-                                            {project.tech_stack.slice(0, 4).map((tech) => (
-                                                <span key={tech} className="px-2 py-0.5 text-xs rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-500/30">{tech}</span>
-                                            ))}
-                                        </div>
-                                    )}
+                                    {(() => {
+                                        const tech = typeof project.tech_stack === 'string' ? JSON.parse(project.tech_stack) : (project.tech_stack || []);
+                                        return tech.length > 0 && (
+                                            <div className="mt-4 flex flex-wrap gap-2">
+                                                {tech.slice(0, 4).map((t) => (
+                                                    <span key={t} className="px-2 py-0.5 text-xs rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-500/30">{t}</span>
+                                                ))}
+                                            </div>
+                                        );
+                                    })()}
                                 </Link>
                             ))}
                         </div>

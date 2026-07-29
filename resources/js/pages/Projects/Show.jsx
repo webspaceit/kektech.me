@@ -65,21 +65,19 @@ export default function Show({ project }) {
                         </div>
                     )}
 
-                    {project.tech_stack?.length > 0 && (
-                        <div className="mt-8">
-                            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Tech Stack</h2>
-                            <div className="flex flex-wrap gap-2">
-                                {project.tech_stack.map((tech) => (
-                                    <span
-                                        key={tech}
-                                        className="px-3 py-1 text-sm rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-500/30"
-                                    >
-                                        {tech}
-                                    </span>
-                                ))}
+                    {(() => {
+                        const tech = typeof project.tech_stack === 'string' ? JSON.parse(project.tech_stack) : (project.tech_stack || []);
+                        return tech.length > 0 && (
+                            <div className="mt-8">
+                                <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Tech Stack</h2>
+                                <div className="flex flex-wrap gap-2">
+                                    {tech.map((t) => (
+                                        <span key={t} className="px-3 py-1 text-sm rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-500/30">{t}</span>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        );
+                    })()}
 
                     {project.description && (
                         <div className="mt-8">

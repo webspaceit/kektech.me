@@ -43,18 +43,16 @@ export default function Index({ projects }) {
                                         <p className="mt-2 text-sm text-gray-400 line-clamp-2">
                                             {project.description}
                                         </p>
-                                        {project.tech_stack?.length > 0 && (
-                                            <div className="mt-4 flex flex-wrap gap-2">
-                                                {project.tech_stack.map((tech) => (
-                                                    <span
-                                                        key={tech}
-                                                        className="px-2 py-0.5 text-xs rounded-full bg-white/10 text-gray-300"
-                                                    >
-                                                        {tech}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        )}
+                                        {(() => {
+                                            const tech = typeof project.tech_stack === 'string' ? JSON.parse(project.tech_stack) : (project.tech_stack || []);
+                                            return tech.length > 0 && (
+                                                <div className="mt-4 flex flex-wrap gap-2">
+                                                    {tech.map((t) => (
+                                                        <span key={t} className="px-2 py-0.5 text-xs rounded-full bg-white/10 text-gray-300">{t}</span>
+                                                    ))}
+                                                </div>
+                                            );
+                                        })()}
                                         <div className="mt-4 flex items-center gap-3">
                                             {project.live_url && (
                                                 <span className="text-xs text-gray-500 flex items-center gap-1">
