@@ -33,13 +33,13 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/resume/download', [ResumeController::class, 'download'])->name('resume.download');
 
 Route::middleware('guest')->group(function () {
-    Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/admin/login', [AuthController::class, 'login']);
+    Route::get('/wsdashboard/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/wsdashboard/login', [AuthController::class, 'login']);
 });
 
-Route::post('/admin/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/wsdashboard/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('projects', ProjectController::class)->except('show');
