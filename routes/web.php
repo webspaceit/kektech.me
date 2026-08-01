@@ -64,4 +64,8 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
     Route::get('chat', [\App\Http\Controllers\Admin\ChatController::class, 'index'])->name('chat.index');
     Route::get('chat/{id}/messages', [\App\Http\Controllers\Admin\ChatController::class, 'messages'])->name('chat.messages');
     Route::post('chat/{id}/send', [\App\Http\Controllers\Admin\ChatController::class, 'send'])->name('chat.send');
+
+    Route::get('support', [\App\Http\Controllers\Admin\SupportController::class, 'index'])->name('support.index');
+    Route::post('support/{id}/status', [\App\Http\Controllers\Admin\SupportController::class, 'updateStatus'])->name('support.updateStatus');
+    Route::delete('support/{id}', [\App\Http\Controllers\Admin\SupportController::class, 'destroy'])->name('support.destroy');
 });
