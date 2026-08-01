@@ -114,7 +114,7 @@ export default function Chat({ rooms: initialRooms }) {
                                 value={newMessage}
                                 onChange={e => setNewMessage(e.target.value)}
                                 placeholder="Type a message..."
-                                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-700 dark:text-white"
+                                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-700 text-black dark:text-white placeholder:text-black dark:placeholder:text-gray-500"
                             />
                             <button type="submit" className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-500">Send</button>
                         </form>
