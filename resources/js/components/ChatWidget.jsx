@@ -109,7 +109,7 @@ export default function ChatWidget() {
                                 value={name}
                                 onChange={e => setName(e.target.value)}
                                 required
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-700 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-700 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                             />
                             <input
                                 type="email"
@@ -117,7 +117,7 @@ export default function ChatWidget() {
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 required
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-700 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-700 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                             />
                             <button type="submit" className="w-full py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-500 transition">Start Chat</button>
                         </form>
@@ -144,7 +144,7 @@ export default function ChatWidget() {
                                     value={newMessage}
                                     onChange={e => setNewMessage(e.target.value)}
                                     placeholder="Type a message..."
-                                    className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-xs dark:bg-gray-700 dark:text-white"
+                                    className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-xs dark:bg-gray-700 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                                 />
                                 <button type="submit" className="px-2 py-1.5 bg-indigo-600 text-white rounded hover:bg-indigo-500 transition">
                                     <Send className="w-3 h-3" />
