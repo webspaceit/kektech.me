@@ -20,6 +20,120 @@
                 @error('site_title') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
 
+            {{-- Logo Upload --}}
+            <div class="mb-4">
+                <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dashboard Logo</label>
+                <div class="flex items-start gap-4">
+                    <div class="flex-1">
+                        <input type="hidden" name="logo_current" value="{{ $setting->logo }}">
+                        <input type="file" id="logo_input" name="logo_file" accept="image/*"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 file:cursor-pointer">
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">PNG, JPG, SVG. Max 5MB. Recommended size: 200x50px</p>
+                        @error('logo_file') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                    </div>
+                    <div id="logo_preview" class="w-20 h-20 rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                        @if($setting->logo)
+                            <img src="{{ $setting->logo }}" alt="Logo Preview" class="w-full h-full object-contain p-1">
+                        @else
+                            <span class="text-gray-400 text-xs">No logo</span>
+                        @endif
+                    </div>
+                    @if($setting->logo)
+                        <button type="button" onclick="if(confirm('Delete this logo?')) document.getElementById('delete-logo-form').submit();" class="shrink-0 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors" title="Delete logo">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    @endif
+                </div>
+                <script>
+                    document.getElementById('logo_input').addEventListener('change', function(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(ev) {
+                                document.getElementById('logo_preview').innerHTML = '<img src="' + ev.target.result + '" alt="Logo Preview" class="w-full h-full object-contain p-1">';
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                </script>
+            </div>
+
+            {{-- Favicon Upload --}}
+            <div class="mb-4">
+                <label for="favicon" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Favicon</label>
+                <div class="flex items-start gap-4">
+                    <div class="flex-1">
+                        <input type="hidden" name="favicon_current" value="{{ $setting->favicon }}">
+                        <input type="file" id="favicon_input" name="favicon_file" accept="image/*"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 file:cursor-pointer">
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">ICO, PNG. Max 2MB. Recommended size: 32x32px or 64x64px</p>
+                        @error('favicon_file') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                    </div>
+                    <div id="favicon_preview" class="w-20 h-20 rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                        @if($setting->favicon)
+                            <img src="{{ $setting->favicon }}" alt="Favicon Preview" class="w-full h-full object-contain p-1">
+                        @else
+                            <span class="text-gray-400 text-xs">No favicon</span>
+                        @endif
+                    </div>
+                    @if($setting->favicon)
+                        <button type="button" onclick="if(confirm('Delete this favicon?')) document.getElementById('delete-favicon-form').submit();" class="shrink-0 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors" title="Delete favicon">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    @endif
+                </div>
+                <script>
+                    document.getElementById('favicon_input').addEventListener('change', function(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(ev) {
+                                document.getElementById('favicon_preview').innerHTML = '<img src="' + ev.target.result + '" alt="Favicon Preview" class="w-full h-full object-contain p-1">';
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                </script>
+            </div>
+
+            {{-- Login Logo Upload --}}
+            <div class="mb-4">
+                <label for="login_logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Login Page Logo</label>
+                <div class="flex items-start gap-4">
+                    <div class="flex-1">
+                        <input type="hidden" name="login_logo_current" value="{{ $setting->login_logo }}">
+                        <input type="file" id="login_logo_input" name="login_logo_file" accept="image/*"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 file:cursor-pointer">
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">PNG, JPG, SVG. Max 5MB. Recommended size: 300x100px</p>
+                        @error('login_logo_file') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                    </div>
+                    <div id="login_logo_preview" class="w-20 h-20 rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                        @if($setting->login_logo)
+                            <img src="{{ $setting->login_logo }}" alt="Login Logo Preview" class="w-full h-full object-contain p-1">
+                        @else
+                            <span class="text-gray-400 text-xs">No logo</span>
+                        @endif
+                    </div>
+                    @if($setting->login_logo)
+                        <button type="button" onclick="if(confirm('Delete this login logo?')) document.getElementById('delete-login-logo-form').submit();" class="shrink-0 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors" title="Delete login logo">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    @endif
+                </div>
+                <script>
+                    document.getElementById('login_logo_input').addEventListener('change', function(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(ev) {
+                                document.getElementById('login_logo_preview').innerHTML = '<img src="' + ev.target.result + '" alt="Login Logo Preview" class="w-full h-full object-contain p-1">';
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                </script>
+            </div>
+
             <div class="mb-4">
                 <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
                 <textarea id="bio" name="bio" rows="4"
@@ -268,6 +382,21 @@
         <div class="flex items-center gap-3 max-w-2xl mb-8">
             <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition">Save Settings</button>
         </div>
+    </form>
+
+    <form id="delete-logo-form" method="POST" action="{{ route('admin.settings.deleteFile', ['field' => 'logo']) }}" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    <form id="delete-favicon-form" method="POST" action="{{ route('admin.settings.deleteFile', ['field' => 'favicon']) }}" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    <form id="delete-login-logo-form" method="POST" action="{{ route('admin.settings.deleteFile', ['field' => 'login_logo']) }}" class="hidden">
+        @csrf
+        @method('DELETE')
     </form>
 
     <form id="delete-hero-image-form" method="POST" action="{{ route('admin.settings.deleteFile', ['field' => 'hero_image']) }}" class="hidden">

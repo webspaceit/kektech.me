@@ -5,10 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Login - {{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+    @if(\App\Models\Setting::get()->favicon)
+        <link rel="icon" type="image/x-icon" href="{{ \App\Models\Setting::get()->favicon }}">
+    @endif
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen">
     <div class="w-full max-w-sm mx-4">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+            @if(\App\Models\Setting::get()->login_logo)
+                <div class="flex justify-center mb-6">
+                    <img src="{{ \App\Models\Setting::get()->login_logo }}" alt="{{ config('app.name') }}" class="h-16 w-auto object-contain">
+                </div>
+            @endif
             <h1 class="text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">Admin Login</h1>
 
             @if ($errors->any())

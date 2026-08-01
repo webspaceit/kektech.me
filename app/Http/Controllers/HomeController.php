@@ -19,6 +19,7 @@ class HomeController extends Controller
         ]);
 
         $featuredProjects = Project::where('featured', true)
+            ->where('is_active', true)
             ->latest()
             ->limit(3)
             ->get();

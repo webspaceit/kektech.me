@@ -46,6 +46,10 @@ class SettingController extends Controller
             'contact_email' => ['nullable', 'string', 'max:255'],
             'contact_phone' => ['nullable', 'string', 'max:255'],
             'contact_address' => ['nullable', 'string'],
+            // Logo settings
+            'logo_file' => ['nullable', 'file', 'image', 'max:5120'],
+            'favicon_file' => ['nullable', 'file', 'image', 'max:2048'],
+            'login_logo_file' => ['nullable', 'file', 'image', 'max:5120'],
         ]);
 
         $data['email_notifications'] = $request->boolean('email_notifications');
@@ -85,6 +89,45 @@ class SettingController extends Controller
             $data['social_links'] = null;
         }
 
+        // Handle logo upload
+        if ($request->hasFile('logo_file')) {
+            $setting = Setting::get();
+            $oldLogo = $setting->logo ? str_replace('/storage/', '', $setting->logo) : null;
+            if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
+                Storage::disk('public')->delete($oldLogo);
+            }
+            $data['logo'] = '/storage/' . $request->file('logo_file')->store('logos', 'public');
+        } else {
+            $data['logo'] = $request->input('logo_current');
+        }
+        unset($data['logo_file']);
+
+        // Handle favicon upload
+        if ($request->hasFile('favicon_file')) {
+            $setting = Setting::get();
+            $oldFavicon = $setting->favicon ? str_replace('/storage/', '', $setting->favicon) : null;
+            if ($oldFavicon && Storage::disk('public')->exists($oldFavicon)) {
+                Storage::disk('public')->delete($oldFavicon);
+            }
+            $data['favicon'] = '/storage/' . $request->file('favicon_file')->store('favicons', 'public');
+        } else {
+            $data['favicon'] = $request->input('favicon_current');
+        }
+        unset($data['favicon_file']);
+
+        // Handle login logo upload
+        if ($request->hasFile('login_logo_file')) {
+            $setting = Setting::get();
+            $oldLoginLogo = $setting->login_logo ? str_replace('/storage/', '', $setting->login_logo) : null;
+            if ($oldLoginLogo && Storage::disk('public')->exists($oldLoginLogo)) {
+                Storage::disk('public')->delete($oldLoginLogo);
+            }
+            $data['login_logo'] = '/storage/' . $request->file('login_logo_file')->store('logos', 'public');
+        } else {
+            $data['login_logo'] = $request->input('login_logo_current');
+        }
+        unset($data['login_logo_file']);
+
         $setting = Setting::get();
         $setting->update($data);
 
@@ -102,6 +145,15 @@ class SettingController extends Controller
         } elseif ($field === 'resume_path' && $setting->resume_path) {
             $path = str_replace('/storage/', '', $setting->resume_path);
             $setting->update(['resume_path' => null]);
+        } elseif ($field === 'logo' && $setting->logo) {
+            $path = str_replace('/storage/', '', $setting->logo);
+            $setting->update(['logo' => null]);
+        } elseif ($field === 'favicon' && $setting->favicon) {
+            $path = str_replace('/storage/', '', $setting->favicon);
+            $setting->update(['favicon' => null]);
+        } elseif ($field === 'login_logo' && $setting->login_logo) {
+            $path = str_replace('/storage/', '', $setting->login_logo);
+            $setting->update(['login_logo' => null]);
         }
 
         if ($path && Storage::disk('public')->exists($path)) {

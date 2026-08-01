@@ -5,15 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Admin') - {{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+    @if(\App\Models\Setting::get()->favicon)
+        <link rel="icon" type="image/x-icon" href="{{ \App\Models\Setting::get()->favicon }}">
+    @endif
 </head>
 <body class="bg-gray-100 dark:bg-gray-900">
     <div class="flex h-screen overflow-hidden">
         <aside class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                <a href="{{ route('admin.dashboard') }}" class="text-lg font-bold text-gray-900 dark:text-white">
-                    {{ config('app.name') }}
-                </a>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Admin Panel</p>
+                @if(\App\Models\Setting::get()->logo)
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center">
+                        <img src="{{ \App\Models\Setting::get()->logo }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
+                    </a>
+                @else
+                    <a href="{{ route('admin.dashboard') }}" class="text-lg font-bold text-gray-900 dark:text-white">
+                        {{ config('app.name') }}
+                    </a>
+                @endif
+                @if(\App\Models\Setting::get()->logo)
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Admin Panel</p>
+                @endif
             </div>
 
             <nav class="flex-1 overflow-y-auto p-3 space-y-1">

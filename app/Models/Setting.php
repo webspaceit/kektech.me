@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
     'testimonials_title', 'testimonials_subtitle',
     'contact_title', 'contact_description', 'contact_email', 'contact_phone', 'contact_address',
     'resume_path',
+    'logo', 'favicon', 'login_logo',
 ])]
 class Setting extends Model
 {

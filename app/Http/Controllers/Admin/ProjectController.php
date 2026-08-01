@@ -72,4 +72,11 @@ class ProjectController extends Controller
 
         return to_route('admin.projects.index')->with('success', 'Project deleted successfully.');
     }
+
+    public function toggle(Project $project)
+    {
+        $project->update(['is_active' => !$project->is_active]);
+
+        return back()->with('success', 'Project ' . ($project->is_active ? 'enabled' : 'disabled') . ' successfully.');
+    }
 }

@@ -43,6 +43,7 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('projects', ProjectController::class)->except('show');
+    Route::post('projects/{project}/toggle', [ProjectController::class, 'toggle'])->name('projects.toggle');
     Route::resource('skills', SkillController::class)->except('show');
     Route::resource('blog-posts', BlogPostController::class)->except('show');
     Route::resource('testimonials', TestimonialController::class)->except('show');
