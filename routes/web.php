@@ -60,4 +60,8 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
     Route::get('media', [MediaController::class, 'index'])->name('media.index');
     Route::post('media', [MediaController::class, 'store'])->name('media.store');
     Route::delete('media/{filename}', [MediaController::class, 'destroy'])->name('media.destroy');
+
+    Route::get('chat', [\App\Http\Controllers\Admin\ChatController::class, 'index'])->name('chat.index');
+    Route::get('chat/{id}/messages', [\App\Http\Controllers\Admin\ChatController::class, 'messages'])->name('chat.messages');
+    Route::post('chat/{id}/send', [\App\Http\Controllers\Admin\ChatController::class, 'send'])->name('chat.send');
 });
