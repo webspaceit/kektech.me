@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Menu, X, Download } from 'lucide-react';
+import ChatWidget from './ChatWidget';
 
 export default function PublicLayout({ children, settings }) {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -110,6 +111,7 @@ export default function PublicLayout({ children, settings }) {
                     </div>
                 </div>
             </footer>
+            <ChatWidget />
         </div>
     );
 }
