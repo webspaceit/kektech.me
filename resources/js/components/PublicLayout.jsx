@@ -19,10 +19,10 @@ export default function PublicLayout({ children, settings }) {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <header className="sticky top-0 z-50 bg-[#0a1a12]/80 backdrop-blur-md border-b border-white/10">
+            <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">
-                        <Link href="/" className="flex items-center gap-2 text-xl font-bold text-white">
+                        <Link href="/" className="flex items-center gap-2 text-xl font-bold text-gray-900">
                             {settings?.logo ? (
                                 <img src={settings.logo} alt={settings.site_title || 'KekTech'} className="h-14 w-auto object-contain" />
                             ) : (
@@ -38,7 +38,7 @@ export default function PublicLayout({ children, settings }) {
                                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                                         url === link.href
                                             ? 'bg-emerald-600 text-white'
-                                            : 'text-gray-300 hover:text-white hover:bg-white/10'
+                                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                                     }`}
                                 >
                                     {link.label}
@@ -54,7 +54,7 @@ export default function PublicLayout({ children, settings }) {
                         </nav>
 
                         <button
-                            className="md:hidden text-gray-300 hover:text-white"
+                            className="md:hidden text-gray-600 hover:text-gray-900"
                             onClick={() => setMobileOpen(!mobileOpen)}
                         >
                             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -71,7 +71,7 @@ export default function PublicLayout({ children, settings }) {
                                     className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                                         url === link.href
                                             ? 'bg-emerald-600 text-white'
-                                            : 'text-gray-300 hover:text-white hover:bg-white/10'
+                                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                                     }`}
                                 >
                                     {link.label}
@@ -91,7 +91,7 @@ export default function PublicLayout({ children, settings }) {
 
             <main className="flex-1">{children}</main>
 
-            <footer className="border-t border-white/10 py-8">
+            <footer className="border-t border-gray-200 py-8 bg-white/50">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-sm text-gray-500">
                         &copy; {new Date().getFullYear()} {settings?.site_title || 'KekTech'}. All rights reserved.
