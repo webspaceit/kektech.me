@@ -21,7 +21,7 @@ export default function Show({ project }) {
                         <div>
                             <h1 className="text-3xl font-bold text-white">{project.title}</h1>
                             {project.featured && (
-                                <span className="mt-2 inline-block px-2.5 py-0.5 text-xs rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-500/30">
+                                <span className="mt-2 inline-block px-2.5 py-0.5 text-xs rounded-full bg-emerald-600/20 text-emerald-300 border border-emerald-500/30">
                                     Featured
                                 </span>
                             )}
@@ -32,7 +32,7 @@ export default function Show({ project }) {
                                     href={project.live_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 transition-colors"
+                                    className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition-colors"
                                 >
                                     <ExternalLink className="w-4 h-4" />
                                     Live Demo
@@ -72,7 +72,7 @@ export default function Show({ project }) {
                                 <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Tech Stack</h2>
                                 <div className="flex flex-wrap gap-2">
                                     {tech.map((t) => (
-                                        <span key={t} className="px-3 py-1 text-sm rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-500/30">{t}</span>
+                                        <span key={t} className="px-3 py-1 text-sm rounded-full bg-emerald-600/20 text-emerald-300 border border-emerald-500/30">{t}</span>
                                     ))}
                                 </div>
                             </div>

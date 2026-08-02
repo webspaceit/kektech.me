@@ -25,7 +25,7 @@ function renderMarkdown(content) {
     html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
     // Inline code
-    html = html.replace(/`([^`\n]+)`/g, '<code class="px-1.5 py-0.5 rounded-md bg-white/10 text-indigo-300 text-sm font-mono">$1</code>');
+    html = html.replace(/`([^`\n]+)`/g, '<code class="px-1.5 py-0.5 rounded-md bg-white/10 text-emerald-300 text-sm font-mono">$1</code>');
 
     // Unordered list items
     html = html.replace(/^- (.*$)/gm, '<li class="text-gray-300 leading-relaxed ml-4 mb-1 list-disc">$1</li>');
@@ -85,7 +85,7 @@ export default function Show({ post }) {
                         <div className="flex-1">
                             <div className="flex items-center gap-3 mb-3">
                                 {post.category && (
-                                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-500/30">
+                                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs rounded-full bg-emerald-600/20 text-emerald-300 border border-emerald-500/30">
                                         <Tag className="w-3 h-3" />
                                         {post.category}
                                     </span>

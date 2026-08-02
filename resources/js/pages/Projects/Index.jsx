@@ -20,7 +20,7 @@ export default function Index({ projects }) {
                                 <Link
                                     key={project.id}
                                     href={`/projects/${project.slug}`}
-                                    className="group block rounded-xl border border-white/10 bg-white/5 overflow-hidden hover:border-indigo-500/50 hover:bg-white/10 transition-all"
+                                    className="group block rounded-xl border border-white/10 bg-white/5 overflow-hidden hover:border-emerald-500/50 hover:bg-white/10 transition-all"
                                 >
                                     {project.images?.[0] && (
                                         <img
@@ -31,11 +31,11 @@ export default function Index({ projects }) {
                                     )}
                                     <div className="p-6">
                                         <div className="flex items-start justify-between">
-                                            <h3 className="text-lg font-semibold text-white group-hover:text-indigo-400 transition-colors">
+                                            <h3 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">
                                                 {project.title}
                                             </h3>
                                             {project.featured && (
-                                                <span className="px-2 py-0.5 text-xs rounded-full bg-indigo-600/20 text-indigo-300 border border-indigo-500/30">
+                                                <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-600/20 text-emerald-300 border border-emerald-500/30">
                                                     Featured
                                                 </span>
                                             )}

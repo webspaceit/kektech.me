@@ -35,7 +35,7 @@ export default function Skills({ skills, categories }) {
                                 onClick={() => setActiveCategory('all')}
                                 className={`px-4 py-1.5 text-sm rounded-full transition-colors ${
                                     activeCategory === 'all'
-                                        ? 'bg-indigo-600 text-white'
+                                        ? 'bg-emerald-600 text-white'
                                         : 'border border-white/10 text-gray-400 hover:text-white hover:bg-white/10'
                                 }`}
                             >
@@ -47,7 +47,7 @@ export default function Skills({ skills, categories }) {
                                     onClick={() => setActiveCategory(cat)}
                                     className={`px-4 py-1.5 text-sm rounded-full transition-colors ${
                                         activeCategory === cat
-                                            ? 'bg-indigo-600 text-white'
+                                            ? 'bg-emerald-600 text-white'
                                             : 'border border-white/10 text-gray-400 hover:text-white hover:bg-white/10'
                                     }`}
                                 >
@@ -63,11 +63,11 @@ export default function Skills({ skills, categories }) {
                             return (
                                 <div
                                     key={skill.id}
-                                    className="rounded-xl border border-white/10 bg-white/5 p-5 hover:border-indigo-500/50 transition-all"
+                                    className="rounded-xl border border-white/10 bg-white/5 p-5 hover:border-emerald-500/50 transition-all"
                                 >
                                     <div className="flex items-center gap-3 mb-3">
-                                        <div className="w-10 h-10 rounded-lg bg-indigo-600/20 flex items-center justify-center">
-                                            <Icon className="w-5 h-5 text-indigo-400" />
+                                        <div className="w-10 h-10 rounded-lg bg-emerald-600/20 flex items-center justify-center">
+                                            <Icon className="w-5 h-5 text-emerald-400" />
                                         </div>
                                         <div>
                                             <p className="font-medium text-white">{skill.name}</p>
@@ -84,7 +84,7 @@ export default function Skills({ skills, categories }) {
                                             </div>
                                             <div className="w-full bg-white/10 rounded-full h-1.5">
                                                 <div
-                                                    className="bg-indigo-500 h-1.5 rounded-full transition-all"
+                                                    className="bg-emerald-500 h-1.5 rounded-full transition-all"
                                                     style={{ width: `${skill.level}%` }}
                                                 />
                                             </div>

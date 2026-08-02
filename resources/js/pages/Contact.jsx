@@ -32,16 +32,16 @@ export default function Contact() {
 
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3 text-gray-400">
-                                    <div className="w-10 h-10 rounded-lg bg-indigo-600/20 flex items-center justify-center">
-                                        <Mail className="w-5 h-5 text-indigo-400" />
+                                    <div className="w-10 h-10 rounded-lg bg-emerald-600/20 flex items-center justify-center">
+                                        <Mail className="w-5 h-5 text-emerald-400" />
                                     </div>
                                     <span>{contactEmail}</span>
                                 </div>
 
                                 {settings?.contact_phone && (
                                     <div className="flex items-center gap-3 text-gray-400">
-                                        <div className="w-10 h-10 rounded-lg bg-indigo-600/20 flex items-center justify-center">
-                                            <Phone className="w-5 h-5 text-indigo-400" />
+                                        <div className="w-10 h-10 rounded-lg bg-emerald-600/20 flex items-center justify-center">
+                                            <Phone className="w-5 h-5 text-emerald-400" />
                                         </div>
                                         <span>{settings.contact_phone}</span>
                                     </div>
@@ -49,8 +49,8 @@ export default function Contact() {
 
                                 {settings?.contact_address && (
                                     <div className="flex items-center gap-3 text-gray-400">
-                                        <div className="w-10 h-10 rounded-lg bg-indigo-600/20 flex items-center justify-center">
-                                            <MapPin className="w-5 h-5 text-indigo-400" />
+                                        <div className="w-10 h-10 rounded-lg bg-emerald-600/20 flex items-center justify-center">
+                                            <MapPin className="w-5 h-5 text-emerald-400" />
                                         </div>
                                         <span>{settings.contact_address}</span>
                                     </div>
@@ -69,7 +69,7 @@ export default function Contact() {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-300 mb-1.5">Name</label>
                                     <input type="text" value={data.name} onChange={(e) => setData('name', e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-colors"
+                                        className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors"
                                         placeholder="Your name" />
                                     {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
                                 </div>
@@ -77,7 +77,7 @@ export default function Contact() {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-300 mb-1.5">Email</label>
                                     <input type="email" value={data.email} onChange={(e) => setData('email', e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-colors"
+                                        className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors"
                                         placeholder="you@example.com" />
                                     {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
                                 </div>
@@ -85,7 +85,7 @@ export default function Contact() {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-300 mb-1.5">Subject</label>
                                     <input type="text" value={data.subject} onChange={(e) => setData('subject', e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-colors"
+                                        className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors"
                                         placeholder="What's this about?" />
                                     {errors.subject && <p className="mt-1 text-sm text-red-400">{errors.subject}</p>}
                                 </div>
@@ -93,13 +93,13 @@ export default function Contact() {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-300 mb-1.5">Message</label>
                                     <textarea value={data.message} onChange={(e) => setData('message', e.target.value)} rows={5}
-                                        className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-colors resize-none"
+                                        className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors resize-none"
                                         placeholder="Your message..." />
                                     {errors.message && <p className="mt-1 text-sm text-red-400">{errors.message}</p>}
                                 </div>
 
                                 <button type="submit" disabled={processing}
-                                    className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 disabled:opacity-50 transition-colors font-medium">
+                                    className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 disabled:opacity-50 transition-colors font-medium">
                                     <Send className="w-4 h-4" />
                                     {processing ? 'Sending...' : 'Send Message'}
                                 </button>

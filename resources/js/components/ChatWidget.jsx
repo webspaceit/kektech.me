@@ -93,9 +93,9 @@ export default function ChatWidget() {
         <div className="fixed bottom-6 right-6 z-50">
             {open ? (
                 <div className="w-80 h-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden">
-                    <div className="bg-indigo-600 text-white px-4 py-3 flex items-center justify-between">
+                    <div className="bg-emerald-600 text-white px-4 py-3 flex items-center justify-between">
                         <h3 className="font-semibold text-sm">Live Chat</h3>
-                        <button onClick={() => setOpen(false)} className="hover:bg-indigo-500 rounded p-1 transition">
+                        <button onClick={() => setOpen(false)} className="hover:bg-emerald-500 rounded p-1 transition">
                             <X className="w-4 h-4" />
                         </button>
                     </div>
@@ -119,7 +119,7 @@ export default function ChatWidget() {
                                 required
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-700 dark:text-white placeholder:text-black dark:placeholder:text-gray-500 text-black dark:text-white"
                             />
-                            <button type="submit" className="w-full py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-500 transition">Start Chat</button>
+                            <button type="submit" className="w-full py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-500 transition">Start Chat</button>
                         </form>
                     ) : (
                         <>
@@ -129,9 +129,9 @@ export default function ChatWidget() {
                                 ) : (
                                     messages.map(msg => (
                                         <div key={msg.id} className={`flex ${msg.is_guest ? 'justify-end' : 'justify-start'}`}>
-                                            <div className={`max-w-[80%] rounded-lg px-3 py-2 text-xs ${msg.is_guest ? 'bg-indigo-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'}`}>
+                                            <div className={`max-w-[80%] rounded-lg px-3 py-2 text-xs ${msg.is_guest ? 'bg-emerald-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'}`}>
                                                 <p>{msg.message}</p>
-                                                <p className={`mt-1 ${msg.is_guest ? 'text-indigo-200' : 'text-gray-500'}`}>{new Date(msg.created_at).toLocaleTimeString()}</p>
+                                                <p className={`mt-1 ${msg.is_guest ? 'text-emerald-200' : 'text-gray-500'}`}>{new Date(msg.created_at).toLocaleTimeString()}</p>
                                             </div>
                                         </div>
                                     ))
@@ -146,7 +146,7 @@ export default function ChatWidget() {
                                     placeholder="Type a message..."
                                     className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-xs dark:bg-gray-700 dark:text-white placeholder:text-black dark:placeholder:text-gray-500 text-black dark:text-white"
                                 />
-                                <button type="submit" className="px-2 py-1.5 bg-indigo-600 text-white rounded hover:bg-indigo-500 transition">
+                                <button type="submit" className="px-2 py-1.5 bg-emerald-600 text-white rounded hover:bg-emerald-500 transition">
                                     <Send className="w-3 h-3" />
                                 </button>
                             </form>
@@ -156,7 +156,7 @@ export default function ChatWidget() {
             ) : (
                 <button
                     onClick={() => setOpen(true)}
-                    className="w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
+                    className="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
                 >
                     <MessageCircle className="w-6 h-6" />
                 </button>

@@ -20,7 +20,7 @@ export default function Index({ posts }) {
                                 <Link
                                     key={post.id}
                                     href={`/blog/${post.slug}`}
-                                    className="group block rounded-xl border border-white/10 bg-white/5 overflow-hidden hover:border-indigo-500/50 hover:bg-white/10 transition-all"
+                                    className="group block rounded-xl border border-white/10 bg-white/5 overflow-hidden hover:border-emerald-500/50 hover:bg-white/10 transition-all"
                                 >
                                     {post.featured_image && (
                                         <img
@@ -32,7 +32,7 @@ export default function Index({ posts }) {
                                     <div className="p-6">
                                         <div className="flex items-center gap-2 mb-2">
                                             {post.category && (
-                                                <span className="px-2 py-0.5 text-xs rounded-full bg-indigo-600/20 text-indigo-300">
+                                                <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-600/20 text-emerald-300">
                                                     {post.category}
                                                 </span>
                                             )}
@@ -43,7 +43,7 @@ export default function Index({ posts }) {
                                                 </span>
                                             )}
                                         </div>
-                                        <h2 className="text-lg font-semibold text-white group-hover:text-indigo-400 transition-colors">
+                                        <h2 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">
                                             {post.title}
                                         </h2>
                                         <p className="mt-2 text-sm text-gray-400 line-clamp-3">
