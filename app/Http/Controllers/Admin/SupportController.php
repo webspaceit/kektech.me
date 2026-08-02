@@ -3,24 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SupportTicket;
+use App\Models\SupportMessage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class SupportController extends Controller
 {
     public function index()
     {
-        $tickets = DB::table('support_tickets')
+        $tickets = SupportTicket::with('messages')
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(fn ($t) => (array) $t);
+            ->get();
 
         $stats = [
-            'open' => DB::table('support_tickets')->where('status', 'open')->count(),
-            'in_progress' => DB::table('support_tickets')->where('status', 'in_progress')->count(),
-            'resolved' => DB::table('support_tickets')->where('status', 'resolved')->count(),
-            'urgent' => DB::table('support_tickets')->where('priority', 'urgent')->count(),
+            'open' => SupportTicket::where('status', 'open')->count(),
+            'in_progress' => SupportTicket::where('status', 'in_progress')->count(),
+            'waiting_customer' => SupportTicket::where('status', 'waiting_customer')->count(),
+            'resolved' => SupportTicket::where('status', 'resolved')->count(),
+            'closed' => SupportTicket::where('status', 'closed')->count(),
+            'total' => SupportTicket::count(),
         ];
 
         return Inertia::render('admin/Support', [
@@ -29,22 +31,61 @@ class SupportController extends Controller
         ]);
     }
 
-    public function updateStatus(Request $request, int $id)
+    public function show(int $id)
     {
+        $ticket = SupportTicket::with('messages')->findOrFail($id);
+
+        return Inertia::render('admin/SupportShow', [
+            'ticket' => $ticket,
+        ]);
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $ticket = SupportTicket::findOrFail($id);
+
         $validated = $request->validate([
-            'status' => 'required|in:open,in_progress,resolved,closed',
+            'status' => 'sometimes|in:open,in_progress,waiting_customer,resolved,closed',
+            'priority' => 'sometimes|in:low,medium,high,urgent',
         ]);
 
-        DB::table('support_tickets')
-            ->where('id', $id)
-            ->update(['status' => $validated['status'], 'updated_at' => now()]);
+        if (isset($validated['status'])) {
+            if ($validated['status'] === 'resolved') $ticket->resolved_at = now();
+            if ($validated['status'] === 'closed') $ticket->closed_at = now();
+        }
 
-        return back();
+        $ticket->update($validated);
+
+        return back()->with('success', 'Ticket updated.');
+    }
+
+    public function reply(Request $request, int $id)
+    {
+        $ticket = SupportTicket::findOrFail($id);
+
+        $validated = $request->validate([
+            'message' => 'required|string|max:5000',
+        ]);
+
+        $ticket->messages()->create([
+            'sender_name' => auth()->user()->name ?? 'Admin',
+            'sender_email' => auth()->user()->email ?? null,
+            'message' => $validated['message'],
+            'is_admin' => true,
+        ]);
+
+        if ($ticket->status === 'open') {
+            $ticket->update(['status' => 'in_progress']);
+        }
+
+        $ticket->touch();
+
+        return back()->with('success', 'Reply sent.');
     }
 
     public function destroy(int $id)
     {
-        DB::table('support_tickets')->where('id', $id)->delete();
-        return back();
+        SupportTicket::findOrFail($id)->delete();
+        return back()->with('success', 'Ticket deleted.');
     }
 }
