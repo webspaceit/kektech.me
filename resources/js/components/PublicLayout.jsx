@@ -21,12 +21,12 @@ export default function PublicLayout({ children, settings }) {
         <div className="min-h-screen flex flex-col">
             <header className="sticky top-0 z-50 bg-[#0a1a12]/80 backdrop-blur-md border-b border-white/10">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
+                    <div className="flex items-center justify-between h-20">
                         <Link href="/" className="flex items-center gap-2 text-xl font-bold text-white">
                             {settings?.logo ? (
-                                <img src={settings.logo} alt={settings.site_title || 'KekTech'} className="h-8 w-auto object-contain" />
+                                <img src={settings.logo} alt={settings.site_title || 'KekTech'} className="h-14 w-auto object-contain" />
                             ) : (
-                                <span>{settings?.site_title || 'KekTech'}</span>
+                                <span className="text-2xl">{settings?.site_title || 'KekTech'}</span>
                             )}
                         </Link>
 
