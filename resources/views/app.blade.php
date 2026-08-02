@@ -11,7 +11,7 @@
         @endif
         @inertiaHead
     </head>
-    <body class="font-sans antialiased bg-[#0a0a0a] text-white">
+    <body class="font-sans antialiased text-white" style="background: linear-gradient(135deg, #0a1a12 0%, #0d2818 30%, #0f2d1b 50%, #0a1f14 75%, #0a0f0c 100%); min-height: 100vh;">
         @inertia
     </body>
 </html>

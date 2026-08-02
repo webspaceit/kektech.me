@@ -11,7 +11,7 @@ function renderMarkdown(content) {
     // Fenced code blocks with language tag
     html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
         const langLabel = lang ? `<span class="absolute top-2 right-3 text-xs text-gray-500">${lang}</span>` : '';
-        return `<div class="relative my-6"><div class="bg-[#0d1117] border border-white/10 rounded-xl p-5 overflow-x-auto">${langLabel}<pre class="text-sm text-gray-300 leading-relaxed"><code>${escapeHtml(code.trim())}</code></pre></div></div>`;
+        return `<div class="relative my-6"><div class="bg-[#0d1f15] border border-white/10 rounded-xl p-5 overflow-x-auto">${langLabel}<pre class="text-sm text-gray-300 leading-relaxed"><code>${escapeHtml(code.trim())}</code></pre></div></div>`;
     });
 
     // Headings
