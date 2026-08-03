@@ -345,6 +345,98 @@
             </div>
         </div>
 
+        {{-- Footer Settings --}}
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-2xl mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Footer Settings</h2>
+
+            <div class="mb-4">
+                <label for="footer_text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Footer Text</label>
+                <textarea id="footer_text" name="footer_text" rows="2"
+                    placeholder="&copy; 2026 KekTech. All rights reserved."
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">{{ old('footer_text', $setting->footer_text) }}</textarea>
+                @error('footer_text') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Leave blank to use the default footer text.</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="footer_font" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Font Family</label>
+                    <select id="footer_font" name="footer_font"
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">
+                        <option value="">Default (Instrument Sans)</option>
+                        <option value="Inter" {{ old('footer_font', $setting->footer_font) === 'Inter' ? 'selected' : '' }}>Inter</option>
+                        <option value="Arial" {{ old('footer_font', $setting->footer_font) === 'Arial' ? 'selected' : '' }}>Arial</option>
+                        <option value="Georgia" {{ old('footer_font', $setting->footer_font) === 'Georgia' ? 'selected' : '' }}>Georgia</option>
+                        <option value="Times New Roman" {{ old('footer_font', $setting->footer_font) === 'Times New Roman' ? 'selected' : '' }}>Times New Roman</option>
+                        <option value="Courier New" {{ old('footer_font', $setting->footer_font) === 'Courier New' ? 'selected' : '' }}>Courier New</option>
+                        <option value="Verdana" {{ old('footer_font', $setting->footer_font) === 'Verdana' ? 'selected' : '' }}>Verdana</option>
+                        <option value="Trebuchet MS" {{ old('footer_font', $setting->footer_font) === 'Trebuchet MS' ? 'selected' : '' }}>Trebuchet MS</option>
+                        <option value="system-ui" {{ old('footer_font', $setting->footer_font) === 'system-ui' ? 'selected' : '' }}>System UI</option>
+                    </select>
+                    @error('footer_font') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="footer_font_size" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Font Size</label>
+                    <select id="footer_font_size" name="footer_font_size"
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">
+                        <option value="">Default (14px)</option>
+                        <option value="12px" {{ old('footer_font_size', $setting->footer_font_size) === '12px' ? 'selected' : '' }}>12px - Small</option>
+                        <option value="13px" {{ old('footer_font_size', $setting->footer_font_size) === '13px' ? 'selected' : '' }}>13px</option>
+                        <option value="14px" {{ old('footer_font_size', $setting->footer_font_size) === '14px' ? 'selected' : '' }}>14px - Normal</option>
+                        <option value="15px" {{ old('footer_font_size', $setting->footer_font_size) === '15px' ? 'selected' : '' }}>15px</option>
+                        <option value="16px" {{ old('footer_font_size', $setting->footer_font_size) === '16px' ? 'selected' : '' }}>16px - Large</option>
+                        <option value="18px" {{ old('footer_font_size', $setting->footer_font_size) === '18px' ? 'selected' : '' }}>18px</option>
+                        <option value="20px" {{ old('footer_font_size', $setting->footer_font_size) === '20px' ? 'selected' : '' }}>20px - XL</option>
+                    </select>
+                    @error('footer_font_size') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label for="footer_color" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Text Color</label>
+                    <div class="flex items-center gap-2">
+                        <input type="color" id="footer_color" name="footer_color" value="{{ old('footer_color', $setting->footer_color ?: '#6b7280') }}"
+                            class="w-10 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer">
+                        <input type="text" id="footer_color_text" value="{{ old('footer_color', $setting->footer_color) }}"
+                            placeholder="#6b7280"
+                            class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm font-mono"
+                            oninput="document.getElementById('footer_color').value = this.value">
+                    </div>
+                    @error('footer_color') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="footer_bg_color" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Background Color</label>
+                    <div class="flex items-center gap-2">
+                        <input type="color" id="footer_bg_color" name="footer_bg_color" value="{{ old('footer_bg_color', $setting->footer_bg_color ?: '#f9fafb') }}"
+                            class="w-10 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer">
+                        <input type="text" id="footer_bg_color_text" value="{{ old('footer_bg_color', $setting->footer_bg_color) }}"
+                            placeholder="#f9fafb"
+                            class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm font-mono"
+                            oninput="document.getElementById('footer_bg_color').value = this.value">
+                    </div>
+                    @error('footer_bg_color') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="footer_align" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Text Align</label>
+                    <select id="footer_align" name="footer_align"
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">
+                        <option value="left" {{ old('footer_align', $setting->footer_align) === 'left' ? 'selected' : '' }}>Left</option>
+                        <option value="center" {{ old('footer_align', $setting->footer_align) === 'center' ? 'selected' : '' }}>Center</option>
+                        <option value="right" {{ old('footer_align', $setting->footer_align) === 'right' ? 'selected' : '' }}>Right</option>
+                    </select>
+                    @error('footer_align') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="p-3 rounded-md bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Preview:</p>
+                <div id="footer-preview" style="padding: 12px 16px; border-radius: 6px; font-size: {{ old('footer_font_size', $setting->footer_font_size ?: '14px') }}; color: {{ old('footer_color', $setting->footer_color ?: '#6b7280') }}; background: {{ old('footer_bg_color', $setting->footer_bg_color ?: '#f9fafb') }}; font-family: {{ old('footer_font', $setting->footer_font ?: 'sans-serif') }}; text-align: {{ old('footer_align', $setting->footer_align ?: 'left') }};">
+                    {{ old('footer_text', $setting->footer_text) ?: '© 2026 KekTech. All rights reserved.' }}
+                </div>
+            </div>
+        </div>
+
         {{-- Email Settings --}}
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-2xl mb-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Email Notifications</h2>

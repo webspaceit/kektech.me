@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
     'contact_title', 'contact_description', 'contact_email', 'contact_phone', 'contact_address',
     'resume_path',
     'logo', 'favicon', 'login_logo',
+    'footer_text', 'footer_font', 'footer_color', 'footer_bg_color', 'footer_font_size', 'footer_align',
 ])]
 class Setting extends Model
 {

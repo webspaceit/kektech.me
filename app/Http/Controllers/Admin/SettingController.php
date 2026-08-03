@@ -50,6 +50,13 @@ class SettingController extends Controller
             'logo_file' => ['nullable', 'file', 'image', 'max:5120'],
             'favicon_file' => ['nullable', 'file', 'image', 'max:2048'],
             'login_logo_file' => ['nullable', 'file', 'image', 'max:5120'],
+            // Footer settings
+            'footer_text' => ['nullable', 'string', 'max:500'],
+            'footer_font' => ['nullable', 'string', 'max:100'],
+            'footer_font_size' => ['nullable', 'string', 'max:10'],
+            'footer_color' => ['nullable', 'string', 'max:20'],
+            'footer_bg_color' => ['nullable', 'string', 'max:20'],
+            'footer_align' => ['nullable', 'string', 'in:left,center,right'],
         ]);
 
         $data['email_notifications'] = $request->boolean('email_notifications');
