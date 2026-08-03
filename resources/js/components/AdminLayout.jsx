@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 
 export default function AdminLayout({ children, title }) {
     const { url } = usePage();
@@ -24,14 +24,14 @@ export default function AdminLayout({ children, title }) {
         <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900">
             <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col shrink-0">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <Link href="/wsdashboard" className="text-lg font-bold text-gray-900 dark:text-white">
+                    <a href="/wsdashboard" className="text-lg font-bold text-gray-900 dark:text-white">
                         KekTech
-                    </Link>
+                    </a>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Admin Panel</p>
                 </div>
                 <nav className="flex-1 overflow-y-auto p-3 space-y-1">
                     {navItems.map(item => (
-                        <Link
+                        <a
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors ${
@@ -44,7 +44,7 @@ export default function AdminLayout({ children, title }) {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                             </svg>
                             {item.label}
-                        </Link>
+                        </a>
                     ))}
                 </nav>
                 <div className="p-3 border-t border-gray-200 dark:border-gray-700">
