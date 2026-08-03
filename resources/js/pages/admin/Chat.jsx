@@ -4,12 +4,44 @@ import AdminLayout from '../../components/AdminLayout';
 
 export default function Chat({ rooms: initialRooms }) {
     const { auth } = usePage().props;
-    const [rooms] = useState(initialRooms);
+    const [rooms, setRooms] = useState(initialRooms);
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const messagesEnd = useRef(null);
+
+    const totalUnread = rooms.reduce((sum, r) => sum + (r.unread_count || 0), 0);
+
+    // Poll rooms for new messages every 5 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetch('/wsdashboard/chat')
+                .then(res => res.text())
+                .then(html => {
+                    const match = html.match(/data-page="([^"]+)"/);
+                    if (match) {
+                        try {
+                            const page = JSON.parse(match[1]);
+                            if (page.props?.rooms) {
+                                setRooms(prev => {
+                                    const newRooms = page.props.rooms;
+                                    // Update selectedRoom if it exists in new data
+                                    setSelectedRoom(prevSel => {
+                                        if (!prevSel) return null;
+                                        const updated = newRooms.find(r => r.id === prevSel.id);
+                                        return updated || prevSel;
+                                    });
+                                    return newRooms;
+                                });
+                            }
+                        } catch (e) {}
+                    }
+                })
+                .catch(() => {});
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         if (selectedRoom) {
@@ -53,8 +85,13 @@ export default function Chat({ rooms: initialRooms }) {
             <div className="flex h-[calc(100vh-6rem)] rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
             {/* Room List */}
             <div className="w-80 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Chat Rooms</h2>
+                    {totalUnread > 0 && (
+                        <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 text-xs font-bold text-white bg-red-500 rounded-full animate-pulse">
+                            {totalUnread}
+                        </span>
+                    )}
                 </div>
                 {rooms.length === 0 ? (
                     <p className="p-4 text-sm text-gray-500">No chat rooms.</p>
@@ -63,21 +100,25 @@ export default function Chat({ rooms: initialRooms }) {
                         <button
                             key={room.id}
                             onClick={() => setSelectedRoom(room)}
-                            className={`w-full text-left p-4 border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition ${selectedRoom?.id === room.id ? 'bg-indigo-50 dark:bg-indigo-900/20' : ''}`}
+                            className={`w-full text-left p-4 border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition ${selectedRoom?.id === room.id ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''} ${room.unread_count > 0 ? 'bg-red-50 dark:bg-red-900/10' : ''}`}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center text-indigo-400 text-sm font-medium">
-                                        {(room.guest_name || room.name)?.charAt(0) || '?'}
+                                    <div className="relative">
+                                        <div className="w-10 h-10 rounded-full bg-emerald-600/20 flex items-center justify-center text-emerald-400 text-sm font-medium">
+                                            {(room.guest_name || room.name)?.charAt(0) || '?'}
+                                        </div>
+                                        {room.unread_count > 0 && (
+                                            <span className="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-red-500 rounded-full border-2 border-white dark:border-gray-800">
+                                                {room.unread_count}
+                                            </span>
+                                        )}
                                     </div>
-                                    <div>
-                                        <p className="text-sm font-medium text-gray-900 dark:text-white">{room.name}</p>
-                                        <p className="text-xs text-gray-500 truncate max-w-[180px]">{room.last_message || 'No messages yet'}</p>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{room.name}</p>
+                                        <p className="text-xs text-gray-500 truncate">{room.last_message || 'No messages yet'}</p>
                                     </div>
                                 </div>
-                                {room.unread_count > 0 && (
-                                    <span className="bg-indigo-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{room.unread_count}</span>
-                                )}
                             </div>
                         </button>
                     ))
@@ -88,9 +129,14 @@ export default function Chat({ rooms: initialRooms }) {
             <div className="flex-1 flex flex-col">
                 {selectedRoom ? (
                     <>
-                        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                            <h3 className="font-semibold text-gray-900 dark:text-white">{selectedRoom.name}</h3>
-                            {selectedRoom.guest_email && <p className="text-xs text-gray-500">{selectedRoom.guest_email}</p>}
+                        <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-emerald-600/20 flex items-center justify-center text-emerald-400 text-sm font-medium">
+                                {(selectedRoom.guest_name || selectedRoom.name)?.charAt(0) || '?'}
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-900 dark:text-white">{selectedRoom.name}</h3>
+                                {selectedRoom.guest_email && <p className="text-xs text-gray-500">{selectedRoom.guest_email}</p>}
+                            </div>
                         </div>
                         <div className="flex-1 overflow-y-auto p-4 space-y-3">
                             {loading ? (
@@ -100,10 +146,10 @@ export default function Chat({ rooms: initialRooms }) {
                             ) : (
                                 messages.map(msg => (
                                     <div key={msg.id} className={`flex ${msg.user?.id === auth?.user?.id ? 'justify-end' : 'justify-start'}`}>
-                                        <div className={`max-w-[70%] rounded-lg px-4 py-2 ${msg.user?.id === auth?.user?.id ? 'bg-indigo-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'}`}>
-                                            {msg.user?.id !== auth?.user?.id && <p className="text-xs font-medium text-indigo-400 mb-1">{msg.user?.name}</p>}
+                                        <div className={`max-w-[70%] rounded-lg px-4 py-2 ${msg.user?.id === auth?.user?.id ? 'bg-emerald-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'}`}>
+                                            {msg.user?.id !== auth?.user?.id && <p className="text-xs font-medium text-emerald-400 mb-1">{msg.user?.name}</p>}
                                             <p className="text-sm">{msg.message}</p>
-                                            <p className={`text-xs mt-1 ${msg.user?.id === auth?.user?.id ? 'text-indigo-200' : 'text-gray-500'}`}>{new Date(msg.created_at).toLocaleTimeString()}</p>
+                                            <p className={`text-xs mt-1 ${msg.user?.id !== auth?.user?.id ? 'text-gray-500' : 'text-emerald-200'}`}>{new Date(msg.created_at).toLocaleTimeString()}</p>
                                         </div>
                                     </div>
                                 ))
@@ -118,7 +164,7 @@ export default function Chat({ rooms: initialRooms }) {
                                 placeholder="Type a message..."
                                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm dark:bg-gray-700 text-black dark:text-white placeholder:text-black dark:placeholder:text-gray-500"
                             />
-                            <button type="submit" className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-500">Send</button>
+                            <button type="submit" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-500">Send</button>
                         </form>
                     </>
                 ) : (
