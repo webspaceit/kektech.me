@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePage } from '@inertiajs/react';
+import AdminLayout from '../../components/AdminLayout';
 
 export default function Chat({ rooms: initialRooms }) {
     const { auth } = usePage().props;
@@ -48,7 +49,8 @@ export default function Chat({ rooms: initialRooms }) {
     };
 
     return (
-        <div className="flex h-[calc(100vh-3rem)] rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
+        <AdminLayout title="Live Chat">
+            <div className="flex h-[calc(100vh-6rem)] rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
             {/* Room List */}
             <div className="w-80 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
@@ -125,6 +127,7 @@ export default function Chat({ rooms: initialRooms }) {
                     </div>
                 )}
             </div>
-        </div>
+            </div>
+        </AdminLayout>
     );
 }
