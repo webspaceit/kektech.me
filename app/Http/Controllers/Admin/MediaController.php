@@ -10,10 +10,11 @@ class MediaController extends Controller
 {
     public function index()
     {
-        $files = collect(Storage::disk('public')->files('media'))
+        $files = collect(Storage::disk('public')->allFiles())
             ->filter(fn ($path) => in_array(pathinfo($path, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'pdf', 'doc', 'docx']))
             ->map(fn ($path) => [
                 'name' => pathinfo($path, PATHINFO_BASENAME),
+                'path' => '/storage/' . $path,
                 'size' => Storage::disk('public')->size($path),
                 'url' => Storage::disk('public')->url($path),
                 'last_modified' => Storage::disk('public')->lastModified($path),
@@ -35,13 +36,20 @@ class MediaController extends Controller
         return back()->with('success', 'File uploaded successfully.');
     }
 
-    public function destroy(string $filename)
+    public function destroy(Request $request)
     {
-        $path = 'media/' . $filename;
+        $filename = $request->route('filename');
+        
+        $files = Storage::disk('public')->allFiles();
+        $found = null;
+        foreach ($files as $path) {
+            if (basename($path) === $filename) {
+                $found = $path;
+                break;
+            }
+        }
 
-        if (Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
-
+        if ($found && Storage::disk('public')->delete($found)) {
             return back()->with('success', 'File deleted successfully.');
         }
 
