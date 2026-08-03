@@ -1,7 +1,7 @@
 import { usePage } from '@inertiajs/react';
 
 export default function AdminLayout({ children, title }) {
-    const { url } = usePage();
+    const { url, logo, appName } = usePage().props;
 
     const navItems = [
         { href: '/wsdashboard', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -24,9 +24,15 @@ export default function AdminLayout({ children, title }) {
         <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900">
             <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col shrink-0">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <a href="/wsdashboard" className="text-lg font-bold text-gray-900 dark:text-white">
-                        KekTech
-                    </a>
+                    {logo ? (
+                        <a href="/wsdashboard" className="block">
+                            <img src={logo} alt={appName || 'KekTech'} className="h-10 w-auto object-contain" />
+                        </a>
+                    ) : (
+                        <a href="/wsdashboard" className="text-lg font-bold text-gray-900 dark:text-white">
+                            {appName || 'KekTech'}
+                        </a>
+                    )}
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Admin Panel</p>
                 </div>
                 <nav className="flex-1 overflow-y-auto p-3 space-y-1">
