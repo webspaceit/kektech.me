@@ -20,7 +20,10 @@ class ChatController extends Controller
                   ->where('cp2.user_id', '!=', $userId);
             })
             ->leftJoin('users', 'cp2.user_id', '=', 'users.id')
-            ->where('cp1.user_id', $userId)
+            ->where(function ($q) use ($userId) {
+                $q->where('cp1.user_id', $userId)
+                  ->orWhere('chat_rooms.type', 'guest');
+            })
             ->select(
                 'chat_rooms.id',
                 'chat_rooms.name',
