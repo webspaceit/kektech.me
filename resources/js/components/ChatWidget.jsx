@@ -13,6 +13,8 @@ export default function ChatWidget() {
     const [loading, setLoading] = useState(false);
     const messagesEnd = useRef(null);
     const prevMsgCount = useRef(0);
+    const sessionIdRef = useRef('');
+    const roomIdRef = useRef(null);
 
     const playNotifSound = () => {
         try {
@@ -53,16 +55,27 @@ export default function ChatWidget() {
             localStorage.setItem('chat_session_id', sid);
         }
         setSessionId(sid);
+        sessionIdRef.current = sid;
 
         const savedRoom = localStorage.getItem('chat_room_id');
         const savedName = localStorage.getItem('chat_name');
         const savedEmail = localStorage.getItem('chat_email');
         if (savedRoom && savedName && savedEmail) {
-            setRoomId(parseInt(savedRoom));
+            const rid = parseInt(savedRoom);
+            setRoomId(rid);
+            roomIdRef.current = rid;
             setName(savedName);
             setEmail(savedEmail);
             setStarted(true);
             prevMsgCount.current = 0;
+
+            fetch(`/api/chat/guest/${rid}/messages?session_id=${sid}`)
+                .then(res => res.json())
+                .then(data => {
+                    setMessages(data);
+                    prevMsgCount.current = data.length;
+                })
+                .catch(() => {});
         }
     }, []);
 
@@ -70,16 +83,11 @@ export default function ChatWidget() {
         messagesEnd.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    useEffect(() => {
-        if (started && roomId && sessionId) {
-            loadMessages(roomId);
-        }
-    }, [started, roomId, sessionId]);
-
     const startChat = async (e) => {
         e.preventDefault();
         if (!name.trim() || !email.trim()) return;
 
+        const sid = sessionIdRef.current;
         const res = await fetch('/api/chat/guest/start', {
             method: 'POST',
             headers: {
@@ -87,23 +95,31 @@ export default function ChatWidget() {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
             },
-            body: JSON.stringify({ name, email, session_id: sessionId }),
+            body: JSON.stringify({ name, email, session_id: sid }),
         });
 
         if (res.ok) {
             const data = await res.json();
             setRoomId(data.room_id);
+            roomIdRef.current = data.room_id;
             setStarted(true);
             prevMsgCount.current = 0;
             localStorage.setItem('chat_room_id', data.room_id);
             localStorage.setItem('chat_name', name);
             localStorage.setItem('chat_email', email);
-            loadMessages(data.room_id);
+
+            const msgRes = await fetch(`/api/chat/guest/${data.room_id}/messages?session_id=${sid}`);
+            if (msgRes.ok) {
+                const msgData = await msgRes.json();
+                setMessages(msgData);
+                prevMsgCount.current = msgData.length;
+            }
         }
     };
 
     const loadMessages = async (id) => {
-        const res = await fetch(`/api/chat/guest/${id}/messages?session_id=${sessionId}`);
+        const sid = sessionIdRef.current;
+        const res = await fetch(`/api/chat/guest/${id}/messages?session_id=${sid}`);
         if (res.ok) {
             const data = await res.json();
             if (data.length > prevMsgCount.current) {
@@ -123,6 +139,7 @@ export default function ChatWidget() {
         e.preventDefault();
         if (!newMessage.trim() || !roomId) return;
 
+        const sid = sessionIdRef.current;
         try {
             const res = await fetch(`/api/chat/guest/${roomId}/messages`, {
                 method: 'POST',
@@ -131,31 +148,24 @@ export default function ChatWidget() {
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
                 },
-                body: JSON.stringify({ message: newMessage, session_id: sessionId }),
+                body: JSON.stringify({ message: newMessage, session_id: sid }),
             });
 
             if (res.ok) {
                 const msg = await res.json();
                 setMessages(prev => [...prev, msg]);
                 setNewMessage('');
-            } else {
-                const err = await res.json();
-                console.error('Chat send error:', err);
             }
         } catch (err) {
             console.error('Chat send failed:', err);
         }
     };
 
-    const pollMessages = () => {
-        if (roomId && started) {
-            loadMessages(roomId);
-        }
-    };
-
     useEffect(() => {
-        if (!open || !started) return;
-        const interval = setInterval(pollMessages, 3000);
+        if (!open || !started || !roomId) return;
+        const poll = () => loadMessages(roomId);
+        poll();
+        const interval = setInterval(poll, 3000);
         return () => clearInterval(interval);
     }, [open, started, roomId]);
 
