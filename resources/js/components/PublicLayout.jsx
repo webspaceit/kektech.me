@@ -99,9 +99,9 @@ export default function PublicLayout({ children, settings }) {
                 textAlign: settings?.footer_align || 'left'
             }}>
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <p className="text-sm">
-                        {settings?.footer_text || `© ${new Date().getFullYear()} ${settings?.site_title || 'KekTech'}. All rights reserved.`}
-                    </p>
+                    <div className="text-sm" dangerouslySetInnerHTML={{
+                        __html: settings?.footer_text || `© ${new Date().getFullYear()} ${settings?.site_title || 'KekTech'}. All rights reserved.`
+                    }} />
                     <div className="flex items-center gap-4" style={{ color: settings?.footer_color || '#6b7280' }}>
                         {socials.github && (
                             <a href={socials.github} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">

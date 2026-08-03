@@ -350,12 +350,12 @@
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Footer Settings</h2>
 
             <div class="mb-4">
-                <label for="footer_text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Footer Text</label>
-                <textarea id="footer_text" name="footer_text" rows="2"
+                <label for="footer_text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Footer Text (HTML allowed)</label>
+                <textarea id="footer_text" name="footer_text" rows="3"
                     placeholder="&copy; 2026 KekTech. All rights reserved."
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">{{ old('footer_text', $setting->footer_text) }}</textarea>
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm font-mono">{{ old('footer_text', $setting->footer_text) }}</textarea>
                 @error('footer_text') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
-                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Leave blank to use the default footer text.</p>
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Supports HTML tags like &lt;a&gt;, &lt;span&gt;, &lt;br&gt;, etc. Leave blank for default text.</p>
             </div>
 
             <div class="grid grid-cols-2 gap-4 mb-4">
@@ -432,7 +432,7 @@
             <div class="p-3 rounded-md bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600">
                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Preview:</p>
                 <div id="footer-preview" style="padding: 12px 16px; border-radius: 6px; font-size: {{ old('footer_font_size', $setting->footer_font_size ?: '14px') }}; color: {{ old('footer_color', $setting->footer_color ?: '#6b7280') }}; background: {{ old('footer_bg_color', $setting->footer_bg_color ?: '#f9fafb') }}; font-family: {{ old('footer_font', $setting->footer_font ?: 'sans-serif') }}; text-align: {{ old('footer_align', $setting->footer_align ?: 'left') }};">
-                    {{ old('footer_text', $setting->footer_text) ?: '© 2026 KekTech. All rights reserved.' }}
+                    {!! old('footer_text', $setting->footer_text) ?: '© 2026 KekTech. All rights reserved.' !!}
                 </div>
             </div>
         </div>
