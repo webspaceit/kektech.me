@@ -54,6 +54,12 @@ class ChatController extends Controller
 
         return Inertia::render('admin/Chat', [
             'rooms' => $rooms,
+            'auth' => [
+                'user' => [
+                    'id' => auth()->id(),
+                    'name' => auth()->user()->name,
+                ],
+            ],
         ]);
     }
 
