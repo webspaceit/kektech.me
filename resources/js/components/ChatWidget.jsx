@@ -34,6 +34,18 @@ export default function ChatWidget() {
         } catch(e) {}
     };
 
+    const showDesktopNotification = (title, body) => {
+        if (Notification.permission === 'granted') {
+            new Notification(title, { body, icon: '/favicon.ico', tag: 'chat-message' });
+        }
+    };
+
+    useEffect(() => {
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }, []);
+
     useEffect(() => {
         let sid = localStorage.getItem('chat_session_id');
         if (!sid) {
@@ -78,6 +90,8 @@ export default function ChatWidget() {
                 const newMsgs = data.slice(prevMsgCount.current);
                 if (newMsgs.some(m => !m.is_guest)) {
                     playNotifSound();
+                    const adminMsg = newMsgs.find(m => !m.is_guest);
+                    showDesktopNotification('New Message from KekTech', adminMsg?.message || 'You have a new message');
                 }
             }
             prevMsgCount.current = data.length;

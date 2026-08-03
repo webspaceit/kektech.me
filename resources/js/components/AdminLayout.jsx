@@ -26,6 +26,18 @@ export default function AdminLayout({ children, title }) {
         } catch(e) {}
     };
 
+    const showDesktopNotification = (title, body) => {
+        if (Notification.permission === 'granted') {
+            new Notification(title, { body, icon: '/favicon.ico', tag: 'chat-message' });
+        }
+    };
+
+    useEffect(() => {
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }, []);
+
     useEffect(() => {
         let prevCount = 0;
         const poll = () => {
@@ -36,7 +48,10 @@ export default function AdminLayout({ children, title }) {
             .then(res => res.json())
             .then(data => {
                 const newCount = data.count || 0;
-                if (newCount > prevCount) playNotifSound();
+                if (newCount > prevCount) {
+                    playNotifSound();
+                    showDesktopNotification('New Chat Message', `You have ${newCount > prevCount ? newCount - prevCount : ''} new chat message${newCount - prevCount !== 1 ? 's' : ''}`);
+                }
                 prevCount = newCount;
                 setUnreadCount(newCount);
             })

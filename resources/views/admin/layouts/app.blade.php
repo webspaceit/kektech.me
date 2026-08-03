@@ -139,6 +139,14 @@
                 });
             } catch(e) {}
         }
+        function showDesktopNotification(title, body) {
+            if (Notification.permission === 'granted') {
+                new Notification(title, { body: body, icon: '/favicon.ico', tag: 'chat-message' });
+            }
+        }
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
         function pollUnreadChat() {
             fetch('/wsdashboard/unread-chat-count', {
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
@@ -153,6 +161,7 @@
                         badge.classList.remove('hidden');
                         if (data.count > lastUnreadCount) {
                             playNotifSound();
+                            showDesktopNotification('New Chat Message', 'You have a new chat message');
                         }
                     } else {
                         badge.classList.add('hidden');
