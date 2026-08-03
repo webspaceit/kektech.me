@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         Inertia::share([
             'logo' => fn () => Setting::get()->logo ?? null,
             'appName' => fn () => config('app.name'),
-            'unreadChatCount' => fn () => $userId = auth()->id() ? DB::table('chat_messages')
+            'unreadChatCount' => fn () => auth()->id() ? DB::table('chat_messages')
                 ->join('chat_rooms', 'chat_messages.room_id', '=', 'chat_rooms.id')
                 ->leftJoin('chat_participants', 'chat_rooms.id', '=', 'chat_participants.room_id')
                 ->where('chat_messages.user_id', '!=', auth()->id())
