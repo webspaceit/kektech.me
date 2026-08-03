@@ -52,7 +52,7 @@ class ChatController extends Controller
                 ];
             });
 
-        return Inertia::render('admin/Chat', [
+        return view('admin.chat.index', [
             'rooms' => $rooms,
         ]);
     }
