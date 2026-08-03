@@ -53,11 +53,28 @@ export default function ChatWidget() {
             localStorage.setItem('chat_session_id', sid);
         }
         setSessionId(sid);
+
+        const savedRoom = localStorage.getItem('chat_room_id');
+        const savedName = localStorage.getItem('chat_name');
+        const savedEmail = localStorage.getItem('chat_email');
+        if (savedRoom && savedName && savedEmail) {
+            setRoomId(parseInt(savedRoom));
+            setName(savedName);
+            setEmail(savedEmail);
+            setStarted(true);
+            prevMsgCount.current = 0;
+        }
     }, []);
 
     useEffect(() => {
         messagesEnd.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
+
+    useEffect(() => {
+        if (started && roomId && sessionId) {
+            loadMessages(roomId);
+        }
+    }, [started, roomId, sessionId]);
 
     const startChat = async (e) => {
         e.preventDefault();
@@ -78,6 +95,9 @@ export default function ChatWidget() {
             setRoomId(data.room_id);
             setStarted(true);
             prevMsgCount.current = 0;
+            localStorage.setItem('chat_room_id', data.room_id);
+            localStorage.setItem('chat_name', name);
+            localStorage.setItem('chat_email', email);
             loadMessages(data.room_id);
         }
     };
