@@ -41,7 +41,7 @@
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                             <td class="px-4 py-3">
                                 @if (in_array(pathinfo($file['name'], PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif', 'webp']))
-                                    <img src="{{ $file['url'] }}" alt="{{ $file['name'] }}" class="w-12 h-12 object-cover rounded border border-gray-200 dark:border-gray-600">
+                                    <img src="{{ $file['path'] }}" alt="{{ $file['name'] }}" class="w-12 h-12 object-cover rounded border border-gray-200 dark:border-gray-600">
                                 @else
                                     <div class="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 text-gray-400">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
@@ -56,7 +56,7 @@
                             <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ \Carbon\Carbon::createFromTimestamp($file['last_modified'])->diffForHumans() }}</td>
                             <td class="px-4 py-3 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <a href="{{ $file['url'] }}" target="_blank"
+                                    <a href="{{ $file['path'] }}" target="_blank"
                                         class="px-2 py-1 text-xs text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded transition">View</a>
                                     <form method="POST" action="{{ route('admin.media.destroy', $file['name']) }}" onsubmit="return confirm('Delete this file?')">
                                         @csrf @method('DELETE')
