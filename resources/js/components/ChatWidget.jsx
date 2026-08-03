@@ -42,9 +42,9 @@ export default function ChatWidget() {
 
         if (res.ok) {
             const data = await res.json();
-            setRoomId(data.id);
+            setRoomId(data.room_id);
             setStarted(true);
-            loadMessages(data.id);
+            loadMessages(data.room_id);
         }
     };
 
