@@ -119,6 +119,22 @@
         </main>
     </div>
     <script>
+        let lastUnreadCount = 0;
+        function playNotifSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 880;
+                osc.type = 'sine';
+                gain.gain.value = 0.3;
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+        }
         function pollUnreadChat() {
             fetch('/wsdashboard/unread-chat-count', {
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
@@ -131,10 +147,14 @@
                     if (data.count > 0) {
                         badge.textContent = data.count;
                         badge.classList.remove('hidden');
+                        if (data.count > lastUnreadCount) {
+                            playNotifSound();
+                        }
                     } else {
                         badge.classList.add('hidden');
                     }
                 }
+                lastUnreadCount = data.count || 0;
             })
             .catch(() => {});
         }

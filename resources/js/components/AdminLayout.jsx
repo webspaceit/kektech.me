@@ -6,14 +6,36 @@ export default function AdminLayout({ children, title }) {
     const { logo, appName } = usePage().props;
     const [unreadCount, setUnreadCount] = useState(0);
 
+    const playNotifSound = () => {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = 880;
+            osc.type = 'sine';
+            gain.gain.value = 0.3;
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            osc.stop(ctx.currentTime + 0.3);
+        } catch(e) {}
+    };
+
     useEffect(() => {
+        let prevCount = 0;
         const poll = () => {
             fetch('/wsdashboard/unread-chat-count', {
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 credentials: 'same-origin'
             })
             .then(res => res.json())
-            .then(data => setUnreadCount(data.count || 0))
+            .then(data => {
+                const newCount = data.count || 0;
+                if (newCount > prevCount) playNotifSound();
+                prevCount = newCount;
+                setUnreadCount(newCount);
+            })
             .catch(() => {});
         };
         poll();
