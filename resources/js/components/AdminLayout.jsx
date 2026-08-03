@@ -2,7 +2,7 @@ import { usePage } from '@inertiajs/react';
 
 export default function AdminLayout({ children, title }) {
     const { url } = usePage();
-    const { logo, appName } = usePage().props;
+    const { logo, appName, unreadChatCount } = usePage().props;
 
     const navItems = [
         { href: '/wsdashboard', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -51,6 +51,9 @@ export default function AdminLayout({ children, title }) {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                             </svg>
                             {item.label}
+                            {item.href === '/wsdashboard/chat' && unreadChatCount > 0 && (
+                                <span className="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-red-500 rounded-full">{unreadChatCount}</span>
+                            )}
                         </a>
                     ))}
                 </nav>

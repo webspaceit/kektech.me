@@ -10,6 +10,22 @@
     @endif
 </head>
 <body class="bg-gray-100 dark:bg-gray-900">
+    @php
+        $unreadChatCount = 0;
+        if (auth()->check()) {
+            $userId = auth()->id();
+            $unreadChatCount = \Illuminate\Support\Facades\DB::table('chat_messages')
+                ->join('chat_rooms', 'chat_messages.room_id', '=', 'chat_rooms.id')
+                ->leftJoin('chat_participants', 'chat_rooms.id', '=', 'chat_participants.room_id')
+                ->where('chat_messages.user_id', '!=', $userId)
+                ->whereNull('chat_messages.read_at')
+                ->where(function ($q) use ($userId) {
+                    $q->where('chat_rooms.type', 'guest')
+                      ->orWhere('chat_participants.user_id', $userId);
+                })
+                ->count();
+        }
+    @endphp
     <div class="flex h-screen overflow-hidden">
         <aside class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col shrink-0">
             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
@@ -73,6 +89,9 @@
                     class="flex items-center gap-3 px-3 py-2 text-sm rounded-md {{ request()->routeIs('admin.chat.*') ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                     Live Chat
+                    @if($unreadChatCount > 0)
+                        <span class="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-red-500 rounded-full">{{ $unreadChatCount }}</span>
+                    @endif
                 </a>
 
                 <a href="{{ route('admin.settings.edit') }}"
