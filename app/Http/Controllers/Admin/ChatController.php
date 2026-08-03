@@ -39,7 +39,10 @@ class ChatController extends Controller
             ->map(function ($room) use ($userId) {
                 $unreadCount = DB::table('chat_messages')
                     ->where('room_id', $room->id)
-                    ->where('user_id', '!=', $userId)
+                    ->where(function ($q) use ($userId) {
+                        $q->whereNull('user_id')
+                          ->orWhere('user_id', '!=', $userId);
+                    })
                     ->whereNull('read_at')
                     ->count();
 

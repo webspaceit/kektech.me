@@ -69,7 +69,10 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
         $count = \Illuminate\Support\Facades\DB::table('chat_messages')
             ->join('chat_rooms', 'chat_messages.room_id', '=', 'chat_rooms.id')
             ->leftJoin('chat_participants', 'chat_rooms.id', '=', 'chat_participants.room_id')
-            ->where('chat_messages.user_id', '!=', $userId)
+            ->where(function ($q) use ($userId) {
+                $q->whereNull('chat_messages.user_id')
+                  ->orWhere('chat_messages.user_id', '!=', $userId);
+            })
             ->whereNull('chat_messages.read_at')
             ->where(function ($q) use ($userId) {
                 $q->where('chat_rooms.type', 'guest')
