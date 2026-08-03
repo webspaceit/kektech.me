@@ -12,6 +12,23 @@ export default function ChatWidget() {
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const messagesEnd = useRef(null);
+    const prevMsgCount = useRef(0);
+
+    const playNotifSound = () => {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = 880;
+            osc.type = 'sine';
+            gain.gain.value = 0.3;
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            osc.stop(ctx.currentTime + 0.3);
+        } catch(e) {}
+    };
 
     useEffect(() => {
         let sid = localStorage.getItem('chat_session_id');
@@ -44,6 +61,7 @@ export default function ChatWidget() {
             const data = await res.json();
             setRoomId(data.room_id);
             setStarted(true);
+            prevMsgCount.current = 0;
             loadMessages(data.room_id);
         }
     };
@@ -52,6 +70,13 @@ export default function ChatWidget() {
         const res = await fetch(`/api/chat/guest/${id}/messages?session_id=${sessionId}`);
         if (res.ok) {
             const data = await res.json();
+            if (data.length > prevMsgCount.current) {
+                const newMsgs = data.slice(prevMsgCount.current);
+                if (newMsgs.some(m => !m.is_guest)) {
+                    playNotifSound();
+                }
+            }
+            prevMsgCount.current = data.length;
             setMessages(data);
         }
     };
