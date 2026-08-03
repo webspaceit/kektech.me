@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         Inertia::share([
             'logo' => fn () => Setting::get()->logo ?? null,
             'appName' => fn () => config('app.name'),
+            'settings' => fn () => Setting::get(),
         ]);
     }
 }
