@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\LiveChat\Models\ChatRoom;
-use App\LiveChat\Models\ChatMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ChatController extends Controller
@@ -14,25 +13,41 @@ class ChatController extends Controller
     {
         $userId = auth()->id();
 
-        $rooms = ChatRoom::whereHas('participants', fn ($q) => $q->where('user_id', $userId))
-            ->with(['participants' => fn ($q) => $q->where('chat_participants.user_id', '!=', $userId)])
-            ->orderBy('last_message_at', 'desc')
+        $rooms = DB::table('chat_rooms')
+            ->leftJoin('chat_participants as cp1', 'chat_rooms.id', '=', 'cp1.room_id')
+            ->leftJoin('chat_participants as cp2', function ($q) use ($userId) {
+                $q->on('chat_rooms.id', '=', 'cp2.room_id')
+                  ->where('cp2.user_id', '!=', $userId);
+            })
+            ->leftJoin('users', 'cp2.user_id', '=', 'users.id')
+            ->where('cp1.user_id', $userId)
+            ->select(
+                'chat_rooms.id',
+                'chat_rooms.name',
+                'chat_rooms.type',
+                'chat_rooms.guest_name',
+                'chat_rooms.guest_email',
+                'chat_rooms.last_message',
+                'chat_rooms.last_message_at',
+                'users.name as other_user_name'
+            )
+            ->orderBy('chat_rooms.last_message_at', 'desc')
             ->get()
             ->map(function ($room) use ($userId) {
-                $otherUser = $room->participants->first();
-                $unreadCount = ChatMessage::where('room_id', $room->id)
+                $unreadCount = DB::table('chat_messages')
+                    ->where('room_id', $room->id)
                     ->where('user_id', '!=', $userId)
                     ->whereNull('read_at')
                     ->count();
 
                 return [
                     'id' => $room->id,
-                    'name' => $room->name ?? ($otherUser?->name ?? $room->guest_name ?? 'Unknown'),
+                    'name' => $room->name ?? $room->other_user_name ?? $room->guest_name ?? 'Unknown',
                     'type' => $room->type,
                     'guest_name' => $room->guest_name,
                     'guest_email' => $room->guest_email,
                     'last_message' => $room->last_message,
-                    'last_message_at' => $room->last_message_at?->toISOString(),
+                    'last_message_at' => $room->last_message_at,
                     'unread_count' => $unreadCount,
                 ];
             });
@@ -44,20 +59,27 @@ class ChatController extends Controller
 
     public function messages(Request $request, int $id)
     {
-        $room = ChatRoom::where('id', $id)->firstOrFail();
-
-        $messages = ChatMessage::where('room_id', $id)
-            ->with('user:id,name')
-            ->orderBy('created_at', 'asc')
+        $messages = DB::table('chat_messages')
+            ->where('room_id', $id)
+            ->leftJoin('users', 'chat_messages.user_id', '=', 'users.id')
+            ->orderBy('chat_messages.created_at', 'asc')
+            ->select(
+                'chat_messages.id',
+                'chat_messages.message',
+                'chat_messages.created_at',
+                'chat_messages.is_guest',
+                'chat_messages.user_id',
+                'users.name as user_name'
+            )
             ->get()
             ->map(fn ($msg) => [
                 'id' => $msg->id,
                 'message' => $msg->message,
-                'created_at' => $msg->created_at->toISOString(),
+                'created_at' => $msg->created_at,
                 'is_guest' => $msg->is_guest,
                 'user' => [
-                    'id' => $msg->user?->id ?? 0,
-                    'name' => $msg->user?->name ?? 'Guest',
+                    'id' => $msg->user_id ?? 0,
+                    'name' => $msg->user_name ?? 'Guest',
                 ],
             ]);
 
@@ -66,27 +88,27 @@ class ChatController extends Controller
 
     public function send(Request $request, int $id)
     {
-        $room = ChatRoom::where('id', $id)->firstOrFail();
-
         $validated = $request->validate([
             'message' => 'required|string|max:5000',
         ]);
 
-        $message = ChatMessage::create([
+        DB::table('chat_messages')->insert([
             'room_id' => $id,
             'user_id' => auth()->id(),
             'message' => $validated['message'],
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        $room->update([
+        DB::table('chat_rooms')->where('id', $id)->update([
             'last_message' => $validated['message'],
             'last_message_at' => now(),
         ]);
 
         return response()->json([
-            'id' => $message->id,
-            'message' => $message->message,
-            'created_at' => $message->created_at->toISOString(),
+            'id' => DB::getPdo()->lastInsertId(),
+            'message' => $validated['message'],
+            'created_at' => now()->toISOString(),
             'user' => [
                 'id' => auth()->id(),
                 'name' => auth()->user()->name,
