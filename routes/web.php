@@ -30,10 +30,6 @@ Route::get('/blog/{slug}', [PublicBlogController::class, 'show'])->name('blog.sh
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-Route::get('/support', [\App\Http\Controllers\PublicSupportController::class, 'index'])->name('support.index');
-Route::post('/support', [\App\Http\Controllers\PublicSupportController::class, 'store'])->name('support.store');
-Route::post('/support/{id}/reply', [\App\Http\Controllers\PublicSupportController::class, 'reply'])->name('support.reply');
-
 Route::get('/resume/download', [ResumeController::class, 'download'])->name('resume.download');
 
 Route::middleware('guest')->group(function () {
@@ -68,10 +64,4 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
     Route::get('chat', [\App\Http\Controllers\Admin\ChatController::class, 'index'])->name('chat.index');
     Route::get('chat/{id}/messages', [\App\Http\Controllers\Admin\ChatController::class, 'messages'])->name('chat.messages');
     Route::post('chat/{id}/send', [\App\Http\Controllers\Admin\ChatController::class, 'send'])->name('chat.send');
-
-    Route::get('support', [\App\Http\Controllers\Admin\SupportController::class, 'index'])->name('support.index');
-    Route::get('support/{id}', [\App\Http\Controllers\Admin\SupportController::class, 'show'])->name('support.show');
-    Route::post('support/{id}/status', [\App\Http\Controllers\Admin\SupportController::class, 'update'])->name('support.update');
-    Route::post('support/{id}/reply', [\App\Http\Controllers\Admin\SupportController::class, 'reply'])->name('support.reply');
-    Route::delete('support/{id}', [\App\Http\Controllers\Admin\SupportController::class, 'destroy'])->name('support.destroy');
 });

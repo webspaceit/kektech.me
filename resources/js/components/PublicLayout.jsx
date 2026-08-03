@@ -13,7 +13,6 @@ export default function PublicLayout({ children, settings }) {
         { href: '/skills', label: 'Skills' },
         { href: '/blog', label: 'Blog' },
         { href: '/contact', label: 'Contact' },
-        { href: '/support', label: 'Support' },
     ];
 
     const socials = settings?.social_links || {};
