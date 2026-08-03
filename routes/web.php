@@ -64,4 +64,18 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
     Route::get('chat', [\App\Http\Controllers\Admin\ChatController::class, 'index'])->name('chat.index');
     Route::get('chat/{id}/messages', [\App\Http\Controllers\Admin\ChatController::class, 'messages'])->name('chat.messages');
     Route::post('chat/{id}/send', [\App\Http\Controllers\Admin\ChatController::class, 'send'])->name('chat.send');
+    Route::get('unread-chat-count', function () {
+        $userId = auth()->id();
+        $count = \Illuminate\Support\Facades\DB::table('chat_messages')
+            ->join('chat_rooms', 'chat_messages.room_id', '=', 'chat_rooms.id')
+            ->leftJoin('chat_participants', 'chat_rooms.id', '=', 'chat_participants.room_id')
+            ->where('chat_messages.user_id', '!=', $userId)
+            ->whereNull('chat_messages.read_at')
+            ->where(function ($q) use ($userId) {
+                $q->where('chat_rooms.type', 'guest')
+                  ->orWhere('chat_participants.user_id', $userId);
+            })
+            ->count();
+        return response()->json(['count' => $count]);
+    })->name('chat.unread-count');
 });

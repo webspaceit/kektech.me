@@ -96,17 +96,4 @@ Route::post('/chat/guest/{id}/messages', function (int $id, Request $request) {
     ]);
 });
 
-Route::middleware('auth:web')->get('/admin/unread-chat-count', function () {
-    $userId = auth()->id();
-    $count = DB::table('chat_messages')
-        ->join('chat_rooms', 'chat_messages.room_id', '=', 'chat_rooms.id')
-        ->leftJoin('chat_participants', 'chat_rooms.id', '=', 'chat_participants.room_id')
-        ->where('chat_messages.user_id', '!=', $userId)
-        ->whereNull('chat_messages.read_at')
-        ->where(function ($q) use ($userId) {
-            $q->where('chat_rooms.type', 'guest')
-              ->orWhere('chat_participants.user_id', $userId);
-        })
-        ->count();
-    return response()->json(['count' => $count]);
-});
+

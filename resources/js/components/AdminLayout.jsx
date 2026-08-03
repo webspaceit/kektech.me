@@ -8,7 +8,7 @@ export default function AdminLayout({ children, title }) {
 
     useEffect(() => {
         const poll = () => {
-            fetch('/api/admin/unread-chat-count', {
+            fetch('/wsdashboard/unread-chat-count', {
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 credentials: 'same-origin'
             })
