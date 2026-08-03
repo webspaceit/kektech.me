@@ -32,10 +32,16 @@ export default function AdminLayout({ children, title }) {
         }
     };
 
-    useEffect(() => {
+    const requestNotifPermission = () => {
         if ('Notification' in window && Notification.permission === 'default') {
             Notification.requestPermission();
         }
+    };
+
+    useEffect(() => {
+        const handler = () => requestNotifPermission();
+        document.addEventListener('click', handler, { once: true });
+        return () => document.removeEventListener('click', handler);
     }, []);
 
     useEffect(() => {

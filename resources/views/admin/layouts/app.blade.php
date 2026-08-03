@@ -144,9 +144,12 @@
                 new Notification(title, { body: body, icon: '/favicon.ico', tag: 'chat-message' });
             }
         }
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission();
+        function requestNotifPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
         }
+        document.addEventListener('click', requestNotifPermission, { once: true });
         function pollUnreadChat() {
             fetch('/wsdashboard/unread-chat-count', {
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },

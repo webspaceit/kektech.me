@@ -42,11 +42,11 @@ export default function ChatWidget() {
         }
     };
 
-    useEffect(() => {
+    const requestNotifPermission = () => {
         if ('Notification' in window && Notification.permission === 'default') {
             Notification.requestPermission();
         }
-    }, []);
+    };
 
     useEffect(() => {
         let sid = localStorage.getItem('chat_session_id');
@@ -235,7 +235,7 @@ export default function ChatWidget() {
                 </div>
             ) : (
                 <button
-                    onClick={() => setOpen(true)}
+                    onClick={() => { setOpen(true); requestNotifPermission(); }}
                     className="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
                 >
                     <MessageCircle className="w-6 h-6" />
