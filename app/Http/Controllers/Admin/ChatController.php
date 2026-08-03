@@ -71,6 +71,17 @@ class ChatController extends Controller
 
     public function messages(Request $request, int $id)
     {
+        $userId = auth()->id();
+
+        DB::table('chat_messages')
+            ->where('room_id', $id)
+            ->where(function ($q) use ($userId) {
+                $q->whereNull('user_id')
+                  ->orWhere('user_id', '!=', $userId);
+            })
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
         $messages = DB::table('chat_messages')
             ->where('room_id', $id)
             ->leftJoin('users', 'chat_messages.user_id', '=', 'users.id')
