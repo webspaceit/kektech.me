@@ -60,20 +60,27 @@ export default function ChatWidget() {
         e.preventDefault();
         if (!newMessage.trim() || !roomId) return;
 
-        const res = await fetch(`/api/chat/guest/${roomId}/messages`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-            },
-            body: JSON.stringify({ message: newMessage, session_id: sessionId }),
-        });
+        try {
+            const res = await fetch(`/api/chat/guest/${roomId}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                },
+                body: JSON.stringify({ message: newMessage, session_id: sessionId }),
+            });
 
-        if (res.ok) {
-            const msg = await res.json();
-            setMessages(prev => [...prev, msg]);
-            setNewMessage('');
+            if (res.ok) {
+                const msg = await res.json();
+                setMessages(prev => [...prev, msg]);
+                setNewMessage('');
+            } else {
+                const err = await res.json();
+                console.error('Chat send error:', err);
+            }
+        } catch (err) {
+            console.error('Chat send failed:', err);
         }
     };
 
