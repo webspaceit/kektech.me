@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('admin', fn (User $user) => $user->is_admin);
 
         Inertia::share([
-            'logo' => fn () => Setting::get()->logo,
+            'logo' => fn () => Setting::get()->logo ?? null,
             'appName' => fn () => config('app.name'),
         ]);
     }
