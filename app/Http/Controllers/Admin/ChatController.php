@@ -133,6 +133,7 @@ class ChatController extends Controller
             'id' => DB::getPdo()->lastInsertId(),
             'message' => $validated['message'],
             'created_at' => now()->toISOString(),
+            'is_guest' => false,
             'user' => [
                 'id' => auth()->id(),
                 'name' => auth()->user()->name,

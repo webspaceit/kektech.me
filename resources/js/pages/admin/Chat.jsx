@@ -56,6 +56,17 @@ export default function Chat({ rooms: initialRooms }) {
     }, [selectedRoom]);
 
     useEffect(() => {
+        if (!selectedRoom) return;
+        const interval = setInterval(() => {
+            fetch(`/wsdashboard/chat/${selectedRoom.id}/messages`)
+                .then(res => res.json())
+                .then(data => setMessages(data))
+                .catch(() => {});
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [selectedRoom]);
+
+    useEffect(() => {
         messagesEnd.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
