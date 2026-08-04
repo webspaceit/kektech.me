@@ -175,7 +175,7 @@
             .catch(() => {});
         }
         pollUnreadChat();
-        setInterval(pollUnreadChat, 5000);
+        setInterval(pollUnreadChat, 1000);
     </script>
 </body>
 </html>

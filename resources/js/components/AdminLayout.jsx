@@ -64,7 +64,7 @@ export default function AdminLayout({ children, title }) {
             .catch(() => {});
         };
         poll();
-        const interval = setInterval(poll, 5000);
+        const interval = setInterval(poll, 1000);
         return () => clearInterval(interval);
     }, []);
 

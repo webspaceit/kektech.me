@@ -170,7 +170,7 @@ export default function ChatWidget() {
         if (!open || !started || !roomId) return;
         const poll = () => loadMessages(roomId);
         poll();
-        const interval = setInterval(poll, 3000);
+        const interval = setInterval(poll, 1000);
         return () => clearInterval(interval);
     }, [open, started, roomId]);
 
