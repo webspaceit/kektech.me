@@ -84,8 +84,20 @@ export default function ChatWidget() {
         }
     }, []);
 
+    const messagesContainerRef = useRef(null);
+    const shouldAutoScroll = useRef(true);
+
+    const checkScroll = () => {
+        const el = messagesContainerRef.current;
+        if (!el) return;
+        const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+        shouldAutoScroll.current = atBottom;
+    };
+
     useEffect(() => {
-        messagesEnd.current?.scrollIntoView({ behavior: 'smooth' });
+        if (shouldAutoScroll.current) {
+            messagesEnd.current?.scrollIntoView({ behavior: 'smooth' });
+        }
     }, [messages]);
 
     const startChat = async (e) => {
@@ -208,7 +220,7 @@ export default function ChatWidget() {
                         </form>
                     ) : (
                         <>
-                            <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                            <div ref={messagesContainerRef} onScroll={checkScroll} className="flex-1 overflow-y-auto p-3 space-y-2">
                                 {messages.length === 0 ? (
                                     <p className="text-center text-xs text-gray-500 mt-8">Waiting for a response...</p>
                                 ) : (

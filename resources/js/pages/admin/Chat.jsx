@@ -61,8 +61,20 @@ export default function Chat({ rooms: initialRooms }) {
         return () => clearInterval(interval);
     }, [selectedRoom]);
 
+    const messagesContainerRef = useRef(null);
+    const shouldAutoScroll = useRef(true);
+
+    const checkScroll = () => {
+        const el = messagesContainerRef.current;
+        if (!el) return;
+        const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+        shouldAutoScroll.current = atBottom;
+    };
+
     useEffect(() => {
-        messagesEnd.current?.scrollIntoView({ behavior: 'smooth' });
+        if (shouldAutoScroll.current) {
+            messagesEnd.current?.scrollIntoView({ behavior: 'smooth' });
+        }
     }, [messages]);
 
     const sendMessage = async (e) => {
@@ -144,7 +156,7 @@ export default function Chat({ rooms: initialRooms }) {
                                 {selectedRoom.guest_email && <p className="text-xs text-gray-500">{selectedRoom.guest_email}</p>}
                             </div>
                         </div>
-                        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                        <div ref={messagesContainerRef} onScroll={checkScroll} className="flex-1 overflow-y-auto p-4 space-y-3">
                             {loading ? (
                                 <p className="text-center text-gray-500">Loading messages...</p>
                             ) : messages.length === 0 ? (
