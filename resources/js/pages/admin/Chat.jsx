@@ -12,6 +12,7 @@ export default function Chat({ rooms: initialRooms }) {
     const messagesEnd = useRef(null);
 
     const totalUnread = rooms.reduce((sum, r) => sum + (r.unread_count || 0), 0);
+    const roomsJson = useRef(JSON.stringify(initialRooms));
 
     // Poll rooms for new messages every 1 second
     useEffect(() => {
@@ -22,14 +23,15 @@ export default function Chat({ rooms: initialRooms }) {
             })
                 .then(res => res.json())
                 .then(newRooms => {
-                    setRooms(prev => {
+                    const newJson = JSON.stringify(newRooms);
+                    if (newJson !== roomsJson.current) {
+                        roomsJson.current = newJson;
+                        setRooms(newRooms);
                         setSelectedRoom(prevSel => {
                             if (!prevSel) return null;
-                            const updated = newRooms.find(r => r.id === prevSel.id);
-                            return updated || prevSel;
+                            return newRooms.find(r => r.id === prevSel.id) || prevSel;
                         });
-                        return newRooms;
-                    });
+                    }
                 })
                 .catch(() => {});
         }, 1000);
