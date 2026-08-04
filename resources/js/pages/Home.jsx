@@ -9,9 +9,9 @@ export default function Home({ settings, featuredProjects, skills, recentPosts, 
             <section className="py-14 sm:py-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid md:grid-cols-12 gap-10 items-center">
-                        {/* Image - 25% */}
-                        <div className="md:col-span-3">
-                            <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-emerald-600/20 to-green-600/20 border border-white/10 flex items-center justify-center overflow-hidden">
+                        {/* Image - smaller */}
+                        <div className="md:col-span-3 flex justify-center">
+                            <div className="w-40 h-40 lg:w-48 lg:h-48 rounded-2xl bg-gradient-to-br from-emerald-600/20 to-green-600/20 border border-white/10 flex items-center justify-center overflow-hidden">
                                 {settings?.hero_image ? (
                                     <img src={settings.hero_image} alt={settings?.hero_name || 'Profile'} className="w-full h-full object-cover rounded-2xl" />
                                 ) : (
