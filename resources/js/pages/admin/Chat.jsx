@@ -13,33 +13,26 @@ export default function Chat({ rooms: initialRooms }) {
 
     const totalUnread = rooms.reduce((sum, r) => sum + (r.unread_count || 0), 0);
 
-    // Poll rooms for new messages every 5 seconds
+    // Poll rooms for new messages every 1 second
     useEffect(() => {
         const interval = setInterval(() => {
-            fetch('/wsdashboard/chat')
-                .then(res => res.text())
-                .then(html => {
-                    const match = html.match(/data-page="([^"]+)"/);
-                    if (match) {
-                        try {
-                            const page = JSON.parse(match[1]);
-                            if (page.props?.rooms) {
-                                setRooms(prev => {
-                                    const newRooms = page.props.rooms;
-                                    // Update selectedRoom if it exists in new data
-                                    setSelectedRoom(prevSel => {
-                                        if (!prevSel) return null;
-                                        const updated = newRooms.find(r => r.id === prevSel.id);
-                                        return updated || prevSel;
-                                    });
-                                    return newRooms;
-                                });
-                            }
-                        } catch (e) {}
-                    }
+            fetch('/wsdashboard/chat/rooms', {
+                headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                credentials: 'same-origin'
+            })
+                .then(res => res.json())
+                .then(newRooms => {
+                    setRooms(prev => {
+                        setSelectedRoom(prevSel => {
+                            if (!prevSel) return null;
+                            const updated = newRooms.find(r => r.id === prevSel.id);
+                            return updated || prevSel;
+                        });
+                        return newRooms;
+                    });
                 })
                 .catch(() => {});
-        }, 5000);
+        }, 1000);
         return () => clearInterval(interval);
     }, []);
 

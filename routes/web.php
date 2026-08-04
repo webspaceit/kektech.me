@@ -62,6 +62,7 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
     Route::delete('media/{filename}', [MediaController::class, 'destroy'])->name('media.destroy');
 
     Route::get('chat', [\App\Http\Controllers\Admin\ChatController::class, 'index'])->name('chat.index');
+    Route::get('chat/rooms', [\App\Http\Controllers\Admin\ChatController::class, 'rooms'])->name('chat.rooms');
     Route::get('chat/{id}/messages', [\App\Http\Controllers\Admin\ChatController::class, 'messages'])->name('chat.messages');
     Route::post('chat/{id}/send', [\App\Http\Controllers\Admin\ChatController::class, 'send'])->name('chat.send');
     Route::get('unread-chat-count', function () {

@@ -9,11 +9,11 @@ use Inertia\Inertia;
 
 class ChatController extends Controller
 {
-    public function index()
+    private function getRooms()
     {
         $userId = auth()->id();
 
-        $rooms = DB::table('chat_rooms')
+        return DB::table('chat_rooms')
             ->leftJoin('chat_participants as cp1', 'chat_rooms.id', '=', 'cp1.room_id')
             ->leftJoin('chat_participants as cp2', function ($q) use ($userId) {
                 $q->on('chat_rooms.id', '=', 'cp2.room_id')
@@ -57,9 +57,12 @@ class ChatController extends Controller
                     'unread_count' => $unreadCount,
                 ];
             });
+    }
 
+    public function index()
+    {
         return Inertia::render('admin/Chat', [
-            'rooms' => $rooms,
+            'rooms' => $this->getRooms(),
             'auth' => [
                 'user' => [
                     'id' => auth()->id(),
@@ -67,6 +70,11 @@ class ChatController extends Controller
                 ],
             ],
         ]);
+    }
+
+    public function rooms()
+    {
+        return response()->json($this->getRooms());
     }
 
     public function messages(Request $request, int $id)
