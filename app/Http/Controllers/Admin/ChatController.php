@@ -119,6 +119,7 @@ class ChatController extends Controller
             'room_id' => $id,
             'user_id' => auth()->id(),
             'message' => $validated['message'],
+            'is_guest' => false,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

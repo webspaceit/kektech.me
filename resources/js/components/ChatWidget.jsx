@@ -43,10 +43,15 @@ export default function ChatWidget() {
     };
 
     const requestNotifPermission = () => {
-        if ('Notification' in window && Notification.permission === 'default') {
+        if ('Notification' in window && (Notification.permission === 'default' || Notification.permission === 'denied')) {
             Notification.requestPermission();
         }
     };
+
+    useEffect(() => {
+        document.addEventListener('click', requestNotifPermission, { once: true });
+        return () => document.removeEventListener('click', requestNotifPermission);
+    }, []);
 
     useEffect(() => {
         let sid = localStorage.getItem('chat_session_id');
