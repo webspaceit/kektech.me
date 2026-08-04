@@ -30,22 +30,6 @@
         </div>
     </div>
 
-    @if ($setting)
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-5 mb-8">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Site Info</h2>
-            <div class="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                    <span class="text-gray-500 dark:text-gray-400">Title:</span>
-                    <span class="text-gray-900 dark:text-white ml-2">{{ $setting->site_title ?? 'Not set' }}</span>
-                </div>
-                <div>
-                    <span class="text-gray-500 dark:text-gray-400">Hero Image:</span>
-                    <span class="text-gray-900 dark:text-white ml-2">{{ $setting->hero_image ? 'Uploaded' : 'Not set' }}</span>
-                </div>
-            </div>
-        </div>
-    @endif
-
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-5">
         <div class="flex items-center justify-between mb-3">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Messages</h2>
