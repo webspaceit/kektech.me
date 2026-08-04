@@ -8,7 +8,6 @@ export default function Chat({ rooms: initialRooms }) {
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const [loading, setLoading] = useState(false);
     const messagesEnd = useRef(null);
 
     const totalUnread = rooms.reduce((sum, r) => sum + (r.unread_count || 0), 0);
@@ -39,25 +38,17 @@ export default function Chat({ rooms: initialRooms }) {
     }, []);
 
     useEffect(() => {
-        if (selectedRoom) {
-            setLoading(true);
-            fetch(`/wsdashboard/chat/${selectedRoom.id}/messages`)
-                .then(res => res.json())
-                .then(data => {
-                    setMessages(data);
-                    setLoading(false);
-                });
-        }
-    }, [selectedRoom]);
+        if (!selectedRoom) { setMessages([]); return; }
 
-    useEffect(() => {
-        if (!selectedRoom) return;
-        const interval = setInterval(() => {
+        const load = () => {
             fetch(`/wsdashboard/chat/${selectedRoom.id}/messages`)
                 .then(res => res.json())
                 .then(data => setMessages(data))
                 .catch(() => {});
-        }, 1000);
+        };
+
+        load();
+        const interval = setInterval(load, 1000);
         return () => clearInterval(interval);
     }, [selectedRoom]);
 
@@ -157,9 +148,7 @@ export default function Chat({ rooms: initialRooms }) {
                             </div>
                         </div>
                         <div ref={messagesContainerRef} onScroll={checkScroll} className="flex-1 overflow-y-auto p-4 space-y-3">
-                            {loading ? (
-                                <p className="text-center text-gray-500">Loading messages...</p>
-                            ) : messages.length === 0 ? (
+                            {messages.length === 0 ? (
                                 <p className="text-center text-gray-500">No messages yet.</p>
                             ) : (
                                 messages.map(msg => (
