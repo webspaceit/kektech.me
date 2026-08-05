@@ -170,16 +170,93 @@ class SettingController extends Controller
         return back()->with('success', ucfirst(str_replace('_', ' ', $field)) . ' deleted successfully.');
     }
 
+    public function changeEmail(Request $request)
+    {
+        $request->validate([
+            'new_email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'current_password' => ['required'],
+        ]);
+
+        $user = auth()->user();
+
+        // Verify the current password before allowing an email change.
+        $currentPassword = $request->input('current_password');
+
+        try {
+            $valid = Hash::check($currentPassword, $user->password);
+        } catch (\RuntimeException $e) {
+            $valid = $this->matchesLegacyHash($currentPassword, $user->password);
+        }
+
+        if (! $valid) {
+            return back()->withErrors([
+                'current_password' => __('The provided password does not match your current password.'),
+            ])->onlyInput('current_password');
+        }
+
+        $user->update(['email' => $request->new_email]);
+
+        return back()->with('success', 'Email updated successfully.');
+    }
+
     public function changePassword(Request $request)
     {
         $request->validate([
-            'current_password' => ['required', 'current_password'],
+            'current_password' => ['required'],
             'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         $user = auth()->user();
+
+        // Verify the current password. The standard 'current_password' rule
+        // throws a RuntimeException when the stored hash is not a valid
+        // bcrypt/argon hash (e.g. a legacy MD5 hash), so we fall back to a
+        // manual check that also supports legacy hashes.
+        $currentPassword = $request->input('current_password');
+
+        try {
+            $valid = Hash::check($currentPassword, $user->password);
+        } catch (\RuntimeException $e) {
+            $valid = $this->matchesLegacyHash($currentPassword, $user->password);
+        }
+
+        if (! $valid) {
+            return back()->withErrors([
+                'current_password' => __('The provided password does not match your current password.'),
+            ])->onlyInput('current_password');
+        }
+
         $user->update(['password' => Hash::make($request->new_password)]);
 
         return back()->with('success', 'Password updated successfully.');
+    }
+
+    /**
+     * Check a plain-text password against a legacy (non-bcrypt) hash.
+     *
+     * @return bool
+     */
+    protected function matchesLegacyHash(string $password, string $storedHash): bool
+    {
+        // MD5 (32-char hex) — common in manually imported accounts.
+        if (preg_match('/^[a-f0-9]{32}$/i', $storedHash)) {
+            return hash_equals(strtolower($storedHash), md5($password));
+        }
+
+        // SHA-1 (40-char hex) and SHA-256 (64-char hex) legacy hashes.
+        if (preg_match('/^[a-f0-9]{40}$/i', $storedHash)) {
+            return hash_equals(strtolower($storedHash), sha1($password));
+        }
+
+        if (preg_match('/^[a-f0-9]{64}$/i', $storedHash)) {
+            return hash_equals(strtolower($storedHash), hash('sha256', $password));
+        }
+
+        // Plain-text fallback (only for stored values that are clearly not hashed).
+        if (! str_starts_with($storedHash, '$')) {
+            return hash_equals($storedHash, $password);
+        }
+
+        return false;
     }
 }

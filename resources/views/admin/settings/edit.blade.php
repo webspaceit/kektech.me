@@ -501,6 +501,29 @@
         @method('DELETE')
     </form>
 
+    {{-- Change Email --}}
+    <form method="POST" action="{{ route('admin.settings.changeEmail') }}" class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-2xl mb-6">
+        @csrf
+        @method('PUT')
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Change Email</h2>
+
+        <div class="mb-4">
+            <label for="new_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New Email Address</label>
+            <input type="email" id="new_email" name="new_email" value="{{ old('new_email', auth()->user()->email) }}" required
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">
+            @error('new_email') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+        </div>
+
+        <div class="mb-4">
+            <label for="email_current_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current Password</label>
+            <input type="password" id="email_current_password" name="current_password" required
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white text-sm">
+            @error('current_password') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+        </div>
+
+        <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition">Update Email</button>
+    </form>
+
     {{-- Change Password --}}
     <form method="POST" action="{{ route('admin.settings.changePassword') }}" class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-2xl mb-6">
         @csrf

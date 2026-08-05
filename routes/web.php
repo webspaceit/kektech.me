@@ -51,6 +51,7 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
     Route::get('settings', [SettingController::class, 'edit'])->name('settings.edit');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
     Route::delete('settings/delete-file/{field}', [SettingController::class, 'deleteFile'])->name('settings.deleteFile');
+    Route::put('settings/change-email', [SettingController::class, 'changeEmail'])->name('settings.changeEmail');
     Route::put('settings/change-password', [SettingController::class, 'changePassword'])->name('settings.changePassword');
 
     Route::get('contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');

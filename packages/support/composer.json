@@ -1,0 +1,33 @@
+{
+    "name": "app/support",
+    "description": "Support ticket system for Laravel with Inertia.js frontend, read-aware badges, and priority-based routing.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^11.0|^12.0|^13.0",
+        "inertiajs/inertia-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Support\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Support\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "App\\Support\\SupportServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
