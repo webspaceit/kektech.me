@@ -102,18 +102,6 @@
 
         <main class="flex-1 overflow-y-auto">
             <div class="p-6">
-                @if (session('success'))
-                    <div class="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded text-sm text-green-700 dark:text-green-300">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded text-sm text-red-700 dark:text-red-300">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
                 @yield('content')
             </div>
         </main>
@@ -176,6 +164,25 @@
         }
         pollUnreadChat();
         setInterval(pollUnreadChat, 1000);
+    </script>
+
+    @if(session('success') || session('error'))
+    <div id="toast-msg"
+         data-message="{{ session('success') ?: session('error') }}"
+         data-type="{{ session('success') ? 'success' : 'error' }}"
+         style="position:fixed;top:16px;right:16px;z-index:9999;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:all 0.3s;display:flex;align-items:center;gap:8px;transform:translateX(120%);opacity:0;{{ session('success') ? 'background:#16a34a;' : 'background:#dc2626;' }}"
+    >
+        <span>{{ session('success') ?: session('error') }}</span>
+    </div>
+    @endif
+    <script>
+    (function() {
+        var el = document.getElementById('toast-msg');
+        if (!el) return;
+        document.body.appendChild(el);
+        setTimeout(function() { el.style.transform = 'translateX(0)'; el.style.opacity = '1'; }, 100);
+        setTimeout(function() { el.style.transform = 'translateX(120%)'; el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 300); }, 4000);
+    })();
     </script>
 </body>
 </html>
