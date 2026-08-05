@@ -167,22 +167,13 @@
     </script>
 
     @if(session('success') || session('error'))
-    <div id="toast-msg"
-         data-message="{{ session('success') ?: session('error') }}"
-         data-type="{{ session('success') ? 'success' : 'error' }}"
-         style="position:fixed;top:16px;right:16px;z-index:9999;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:all 0.3s;display:flex;align-items:center;gap:8px;transform:translateX(120%);opacity:0;{{ session('success') ? 'background:#16a34a;' : 'background:#dc2626;' }}"
-    >
+    <style>
+        @keyframes toast-in { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes toast-out { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+    </style>
+    <div style="position:fixed;top:16px;right:16px;z-index:9999;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;{{ session('success') ? 'background:#16a34a;' : 'background:#dc2626;' }}animation:toast-in 0.3s ease forwards,toast-out 0.3s ease 3.7s forwards;">
         <span>{{ session('success') ?: session('error') }}</span>
     </div>
     @endif
-    <script>
-    (function() {
-        var el = document.getElementById('toast-msg');
-        if (!el) return;
-        document.body.appendChild(el);
-        setTimeout(function() { el.style.transform = 'translateX(0)'; el.style.opacity = '1'; }, 100);
-        setTimeout(function() { el.style.transform = 'translateX(120%)'; el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 300); }, 4000);
-    })();
-    </script>
 </body>
 </html>
