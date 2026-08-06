@@ -166,14 +166,15 @@
         setInterval(pollUnreadChat, 1000);
     </script>
 
-    @if(session('success') || session('error'))
     <style>
         @keyframes toast-in { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes toast-out { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
     </style>
-    <div style="position:fixed;top:16px;right:16px;z-index:9999;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;{{ session('success') ? 'background:#16a34a;' : 'background:#dc2626;' }}animation:toast-in 0.3s ease forwards,toast-out 0.3s ease 3.7s forwards;">
-        <span>{{ session('success') ?: session('error') }}</span>
-    </div>
+    @if(session('success'))
+    <div style="position:fixed;top:16px;right:16px;z-index:9999;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;background:#16a34a;animation:toast-in 0.3s ease forwards,toast-out 0.3s ease 3.7s forwards;">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+    <div style="position:fixed;top:16px;right:16px;z-index:9999;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;background:#dc2626;animation:toast-in 0.3s ease forwards,toast-out 0.3s ease 3.7s forwards;">{{ session('error') }}</div>
     @endif
 </body>
 </html>
