@@ -15,6 +15,11 @@ class PublicBlogController extends Controller
 
         return Inertia::render('Blog/Index', [
             'posts' => $posts,
+            'seo' => [
+                'title' => 'Blog',
+                'description' => 'Thoughts, tutorials, and insights on web development, Laravel, React, and modern technologies.',
+                'type' => 'website',
+            ],
         ]);
     }
 
@@ -24,8 +29,18 @@ class PublicBlogController extends Controller
             ->whereNotNull('published_at')
             ->firstOrFail();
 
+        $excerpt = strip_tags(substr($post->content, 0, 160));
+
         return Inertia::render('Blog/Show', [
             'post' => $post,
+            'seo' => [
+                'title' => $post->title,
+                'description' => $excerpt ?: $post->title,
+                'image' => $post->featured_image,
+                'type' => 'article',
+                'publishedTime' => $post->published_at?->toIso8601String(),
+                'modifiedTime' => $post->updated_at?->toIso8601String(),
+            ],
         ]);
     }
 }

@@ -32,6 +32,53 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 
 Route::get('/resume/download', [ResumeController::class, 'download'])->name('resume.download');
 
+Route::get('/sitemap.xml', function () {
+    $url = config('app.url', 'https://kektech.me');
+    $projects = \App\Models\Project::where('is_active', true)->latest()->get();
+    $posts = \App\Models\BlogPost::whereNotNull('published_at')->latest('published_at')->get();
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    $xml .= '<url><loc>' . $url . '</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>';
+    $xml .= '<url><loc>' . $url . '/projects</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>';
+    $xml .= '<url><loc>' . $url . '/skills</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>';
+    $xml .= '<url><loc>' . $url . '/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>';
+    $xml .= '<url><loc>' . $url . '/contact</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>';
+
+    foreach ($projects as $project) {
+        $xml .= '<url>';
+        $xml .= '<loc>' . $url . '/projects/' . $project->slug . '</loc>';
+        $xml .= '<lastmod>' . $project->updated_at->format('Y-m-d') . '</lastmod>';
+        $xml .= '<changefreq>monthly</changefreq>';
+        $xml .= '<priority>0.7</priority>';
+        $xml .= '</url>';
+    }
+
+    foreach ($posts as $post) {
+        $xml .= '<url>';
+        $xml .= '<loc>' . $url . '/blog/' . $post->slug . '</loc>';
+        $xml .= '<lastmod>' . $post->updated_at->format('Y-m-d') . '</lastmod>';
+        $xml .= '<changefreq>monthly</changefreq>';
+        $xml .= '<priority>0.7</priority>';
+        $xml .= '</url>';
+    }
+
+    $xml .= '</urlset>';
+
+    return response($xml, 200)->header('Content-Type', 'application/xml');
+});
+
+Route::get('/robots.txt', function () {
+    $url = config('app.url', 'https://kektech.me');
+    $txt = "User-agent: *\n";
+    $txt .= "Allow: /\n";
+    $txt .= "Disallow: /wsdashboard\n";
+    $txt .= "Disallow: /api\n\n";
+    $txt .= "Sitemap: " . $url . "/sitemap.xml\n";
+
+    return response($txt, 200)->header('Content-Type', 'text/plain');
+});
+
 Route::middleware('guest')->group(function () {
     Route::get('/wsdashboard/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/wsdashboard/login', [AuthController::class, 'login']);
@@ -44,6 +91,8 @@ Route::prefix('wsdashboard')->name('admin.')->middleware(['auth', 'admin'])->gro
 
     Route::resource('projects', ProjectController::class)->except('show');
     Route::post('projects/{project}/toggle', [ProjectController::class, 'toggle'])->name('projects.toggle');
+    Route::delete('project-media/{media}', [ProjectController::class, 'destroyMedia'])->name('projects.media.destroy');
+    Route::post('project-media/reorder', [ProjectController::class, 'reorderMedia'])->name('projects.media.reorder');
     Route::resource('skills', SkillController::class)->except('show');
     Route::resource('blog-posts', BlogPostController::class)->except('show');
     Route::resource('testimonials', TestimonialController::class)->except('show');

@@ -1,5 +1,6 @@
 import PublicLayout from '../../components/PublicLayout';
-import { Link, usePage, Head } from '@inertiajs/react';
+import HeadSEO from '../../components/HeadSEO';
+import { Link, usePage } from '@inertiajs/react';
 import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import { useMemo } from 'react';
 
@@ -64,13 +65,13 @@ function escapeHtml(text) {
         .replace(/>/g, '&gt;');
 }
 
-export default function Show({ post }) {
+export default function Show({ post, seo }) {
     const { settings } = usePage().props;
     const htmlContent = useMemo(() => renderMarkdown(post.content), [post.content]);
 
     return (
         <PublicLayout settings={settings}>
-            <Head title={post.title} />
+            <HeadSEO {...seo} />
             <section className="py-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <Link
@@ -112,6 +113,7 @@ export default function Show({ post }) {
                             src={post.featured_image}
                             alt={post.title}
                             className="w-full rounded-xl border border-white/10 mt-8 mb-8"
+                            loading="lazy"
                         />
                     )}
 

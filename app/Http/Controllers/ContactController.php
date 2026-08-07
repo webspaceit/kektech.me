@@ -15,6 +15,11 @@ class ContactController extends Controller
     {
         return Inertia::render('Contact', [
             'settings' => Setting::get(),
+            'seo' => [
+                'title' => 'Contact',
+                'description' => 'Get in touch for project inquiries, collaborations, or just to say hello.',
+                'type' => 'website',
+            ],
         ]);
     }
 

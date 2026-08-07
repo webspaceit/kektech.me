@@ -1,4 +1,5 @@
 import PublicLayout from '../components/PublicLayout';
+import HeadSEO from '../components/HeadSEO';
 import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Code, Layers, Database, Globe, Smartphone, Server, Palette, Terminal } from 'lucide-react';
@@ -14,7 +15,7 @@ const iconMap = {
     terminal: Terminal,
 };
 
-export default function Skills({ skills, categories }) {
+export default function Skills({ skills, categories, seo }) {
     const { settings } = usePage().props;
     const [activeCategory, setActiveCategory] = useState('all');
 
@@ -24,6 +25,7 @@ export default function Skills({ skills, categories }) {
 
     return (
         <PublicLayout settings={settings}>
+            <HeadSEO {...seo} />
             <section className="py-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-3xl font-bold text-white mb-2">Skills</h1>

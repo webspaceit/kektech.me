@@ -1,12 +1,16 @@
 import PublicLayout from '../../components/PublicLayout';
+import HeadSEO from '../../components/HeadSEO';
 import { Link, usePage } from '@inertiajs/react';
 import { ArrowLeft, ExternalLink, Code } from 'lucide-react';
 
-export default function Show({ project }) {
+export default function Show({ project, seo }) {
     const { settings } = usePage().props;
+    const media = project.media || [];
+    const hasMedia = media.length > 0;
 
     return (
         <PublicLayout settings={settings}>
+            <HeadSEO {...seo} />
             <section className="py-20">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <Link
@@ -52,7 +56,34 @@ export default function Show({ project }) {
                         </div>
                     </div>
 
-                    {project.images?.length > 0 && (
+                    {hasMedia && (
+                        <div className="mt-8 space-y-4">
+                            {media.map((item) => (
+                                item.type === 'video' ? (
+                                    <div key={item.id} className="rounded-xl overflow-hidden border border-white/10">
+                                        <video
+                                            src={item.url}
+                                            controls
+                                            className="w-full"
+                                            loading="lazy"
+                                        >
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                ) : (
+                                    <img
+                                        key={item.id}
+                                        src={item.url}
+                                        alt={item.caption || `${project.title} screenshot`}
+                                        className="w-full rounded-xl border border-white/10"
+                                        loading="lazy"
+                                    />
+                                )
+                            ))}
+                        </div>
+                    )}
+
+                    {!hasMedia && project.images?.length > 0 && (
                         <div className="mt-8 space-y-4">
                             {project.images.map((image, i) => (
                                 <img
@@ -60,6 +91,7 @@ export default function Show({ project }) {
                                     src={image}
                                     alt={`${project.title} screenshot ${i + 1}`}
                                     className="w-full rounded-xl border border-white/10"
+                                    loading="lazy"
                                 />
                             ))}
                         </div>

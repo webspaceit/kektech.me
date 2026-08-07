@@ -15,6 +15,11 @@ class PublicSkillController extends Controller
         return Inertia::render('Skills', [
             'skills' => $skills,
             'categories' => $categories,
+            'seo' => [
+                'title' => 'Skills',
+                'description' => 'Technologies, tools, and frameworks I work with — JavaScript, PHP, Laravel, React, WordPress, and more.',
+                'type' => 'website',
+            ],
         ]);
     }
 }

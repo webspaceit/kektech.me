@@ -3,6 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="index, follow">
+        <meta name="theme-color" content="#0a1a12">
+        <meta name="author" content="{{ config('app.name', 'KekTech') }}">
         <title inertia>{{ config('app.name', 'KekTech') }}</title>
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.jsx'])

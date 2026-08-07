@@ -1,12 +1,14 @@
 import PublicLayout from '../../components/PublicLayout';
+import HeadSEO from '../../components/HeadSEO';
 import { Link, usePage } from '@inertiajs/react';
 import { Calendar } from 'lucide-react';
 
-export default function Index({ posts }) {
+export default function Index({ posts, seo }) {
     const { settings } = usePage().props;
 
     return (
         <PublicLayout settings={settings}>
+            <HeadSEO {...seo} />
             <section className="py-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-3xl font-bold text-white mb-2">Blog</h1>
@@ -27,6 +29,7 @@ export default function Index({ posts }) {
                                             src={post.featured_image}
                                             alt={post.title}
                                             className="w-full h-48 object-cover"
+                                            loading="lazy"
                                         />
                                     )}
                                     <div className="p-6">

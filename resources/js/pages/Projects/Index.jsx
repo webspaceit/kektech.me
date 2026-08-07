@@ -1,12 +1,14 @@
 import PublicLayout from '../../components/PublicLayout';
+import HeadSEO from '../../components/HeadSEO';
 import { Link, usePage } from '@inertiajs/react';
 import { ExternalLink, Code } from 'lucide-react';
 
-export default function Index({ projects }) {
+export default function Index({ projects, seo }) {
     const { settings } = usePage().props;
 
     return (
         <PublicLayout settings={settings}>
+            <HeadSEO {...seo} />
             <section className="py-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-3xl font-bold text-white mb-2">Projects</h1>
@@ -22,18 +24,20 @@ export default function Index({ projects }) {
                                     href={`/projects/${project.slug}`}
                                     className="group block rounded-xl border border-white/10 bg-white/5 overflow-hidden hover:border-emerald-500/50 hover:bg-white/10 transition-all"
                                 >
-                                    {project.images?.[0] && (
-                                        <img
-                                            src={project.images[0]}
-                                            alt={project.title}
-                                            className="w-full h-48 object-cover"
-                                        />
-                                    )}
+                                    {project.media?.[0] ? (
+                                        project.media[0].type === 'video' ? (
+                                            <video src={project.media[0].url} className="w-full h-48 object-cover" muted loading="lazy" />
+                                        ) : (
+                                            <img src={project.media[0].url} alt={project.media[0].caption || project.title} className="w-full h-48 object-cover" loading="lazy" />
+                                        )
+                                    ) : project.images?.[0] ? (
+                                        <img src={project.images[0]} alt={project.title} className="w-full h-48 object-cover" loading="lazy" />
+                                    ) : null}
                                     <div className="p-6">
                                         <div className="flex items-start justify-between">
-                                            <h3 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                                            <h2 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">
                                                 {project.title}
-                                            </h3>
+                                            </h2>
                                             {project.featured && (
                                                 <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-600/20 text-emerald-300 border border-emerald-500/30">
                                                     Featured

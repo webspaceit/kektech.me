@@ -1,8 +1,9 @@
 import PublicLayout from '../components/PublicLayout';
-import { useForm, usePage, Head } from '@inertiajs/react';
+import HeadSEO from '../components/HeadSEO';
+import { useForm, usePage } from '@inertiajs/react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
-export default function Contact() {
+export default function Contact({ seo }) {
     const { settings, flash } = usePage().props;
     const { data, setData, post, processing, errors, wasSuccessful } = useForm({
         name: '',
@@ -20,7 +21,7 @@ export default function Contact() {
 
     return (
         <PublicLayout settings={settings}>
-            <Head title="Contact" />
+            <HeadSEO {...seo} />
             <section className="py-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-12">

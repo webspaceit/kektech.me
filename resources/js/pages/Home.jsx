@@ -1,10 +1,13 @@
 import PublicLayout from '../components/PublicLayout';
+import HeadSEO from '../components/HeadSEO';
 import { Link, usePage } from '@inertiajs/react';
 import { ArrowRight, Code, Mail, MapPin, Quote, Star } from 'lucide-react';
 
-export default function Home({ settings, featuredProjects, skills, recentPosts, testimonials }) {
+export default function Home({ settings, featuredProjects, skills, recentPosts, testimonials, seo }) {
     return (
         <PublicLayout settings={settings}>
+            <HeadSEO {...seo} url={typeof window !== 'undefined' ? window.location.origin : ''} />
+
             {/* Hero */}
             <section className="py-14 sm:py-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,7 +16,7 @@ export default function Home({ settings, featuredProjects, skills, recentPosts, 
                         <div className="md:col-span-3 flex justify-center">
                             <div className="w-40 h-40 lg:w-48 lg:h-48 rounded-2xl bg-gradient-to-br from-emerald-600/20 to-green-600/20 border border-white/10 flex items-center justify-center overflow-hidden">
                                 {settings?.hero_image ? (
-                                    <img src={settings.hero_image} alt={settings?.hero_name || 'Profile'} className="w-full h-full object-cover rounded-2xl" />
+                                    <img src={settings.hero_image} alt={settings?.hero_name || 'Profile'} className="w-full h-full object-cover rounded-2xl" loading="eager" />
                                 ) : (
                                     <span className="text-6xl font-bold text-emerald-500">{settings?.hero_name?.charAt(0) || 'S'}</span>
                                 )}
@@ -82,9 +85,15 @@ export default function Home({ settings, featuredProjects, skills, recentPosts, 
                                     href={`/projects/${project.slug}`}
                                     className="group block rounded-xl border border-white/10 bg-white/5 p-6 hover:border-emerald-500/50 hover:bg-white/10 transition-all"
                                 >
-                                    {project.images?.[0] && (
-                                        <img src={project.images[0]} alt={project.title} className="w-full h-40 object-cover rounded-lg mb-4" />
-                                    )}
+                                    {project.media?.[0] ? (
+                                        project.media[0].type === 'video' ? (
+                                            <video src={project.media[0].url} className="w-full h-40 object-cover rounded-lg mb-4" muted loading="lazy" />
+                                        ) : (
+                                            <img src={project.media[0].url} alt={project.media[0].caption || project.title} className="w-full h-40 object-cover rounded-lg mb-4" loading="lazy" />
+                                        )
+                                    ) : project.images?.[0] ? (
+                                        <img src={project.images[0]} alt={project.title} className="w-full h-40 object-cover rounded-lg mb-4" loading="lazy" />
+                                    ) : null}
                                     <h3 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">{project.title}</h3>
                                     <p className="mt-2 text-sm text-gray-400 line-clamp-2">{project.description}</p>
                                     {(() => {
@@ -145,7 +154,7 @@ export default function Home({ settings, featuredProjects, skills, recentPosts, 
                         <div className="grid md:grid-cols-3 gap-6">
                             {recentPosts.map((post) => (
                                 <Link key={post.id} href={`/blog/${post.slug}`} className="group block rounded-xl border border-white/10 bg-white/5 p-6 hover:border-emerald-500/50 hover:bg-white/10 transition-all">
-                                    {post.featured_image && <img src={post.featured_image} alt={post.title} className="w-full h-40 object-cover rounded-lg mb-4" />}
+                                    {post.featured_image && <img src={post.featured_image} alt={post.title} className="w-full h-40 object-cover rounded-lg mb-4" loading="lazy" />}
                                     <div className="flex items-center gap-2 mb-2">
                                         {post.category && <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-600/20 text-emerald-300">{post.category}</span>}
                                         {post.published_at && <span className="text-xs text-gray-500">{new Date(post.published_at).toLocaleDateString()}</span>}
@@ -175,7 +184,7 @@ export default function Home({ settings, featuredProjects, skills, recentPosts, 
                                     </div>
                                     <p className="text-gray-400 text-sm leading-relaxed mb-6 italic">&ldquo;{t.content}&rdquo;</p>
                                     <div className="flex items-center gap-3">
-                                        {t.avatar ? <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover" /> : <div className="w-10 h-10 rounded-full bg-emerald-600/20 flex items-center justify-center"><Quote className="w-4 h-4 text-emerald-400" /></div>}
+                                        {t.avatar ? <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover" loading="lazy" /> : <div className="w-10 h-10 rounded-full bg-emerald-600/20 flex items-center justify-center"><Quote className="w-4 h-4 text-emerald-400" /></div>}
                                         <div>
                                             <p className="text-sm font-medium text-white">{t.name}</p>
                                             {(t.role || t.company) && <p className="text-xs text-gray-500">{t.role}{t.role && t.company ? ' at ' : ''}{t.company}</p>}
